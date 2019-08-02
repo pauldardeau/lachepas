@@ -19,17 +19,18 @@
 #include "GFS.h"
 #include "Encryption.h"
 
+using namespace std;
 using namespace lachepas;
 using namespace chaudiere;
 using namespace tonnerre;
 
-static const std::string EMPTY_STRING           = "";
-static const std::string SLASH                  = "/";
-static const std::string ZERO                   = "0";
+static const string EMPTY_STRING           = "";
+static const string SLASH                  = "/";
+static const string ZERO                   = "0";
 
-static const std::string ERR_MISSING_DIRECTORY  = "missing directory name";
-static const std::string ERR_MISSING_FILE       = "missing file name";
-static const std::string ERR_NOT_IMPLEMENTED    = "not implemented";
+static const string ERR_MISSING_DIRECTORY  = "missing directory name";
+static const string ERR_MISSING_FILE       = "missing file name";
+static const string ERR_NOT_IMPLEMENTED    = "not implemented";
 
 
 //******************************************************************************
@@ -47,12 +48,12 @@ public:
    
    void handleTextMessage(const Message& requestMessage,
                           Message& responseMessage,
-                          const std::string& requestName,
-                          const std::string& requestPayload,
-                          std::string& responsePayload) {
+                          const string& requestName,
+                          const string& requestPayload,
+                          string& responsePayload) {
       if (requestName == GFSMessageCommands::MSG_DIR_STAT) {
          if (GFSMessage::hasDirectory(requestMessage)) {
-            //const std::string& directory =
+            //const string& directory =
             //   GFSMessage::getDirectory(requestMessage);
             encodeBool(responseMessage, false);
             encodeError(responseMessage, ERR_NOT_IMPLEMENTED);
@@ -61,7 +62,7 @@ public:
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
       } else if (requestName == GFSMessageCommands::MSG_DIR_LIST) {
-         std::vector<std::string> listDirectories;
+         vector<string> listDirectories;
             
          if (m_server.dirList(listDirectories)) {
             encodeSuccess(responseMessage);
@@ -72,13 +73,13 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_ADD) {
          if (GFSMessage::hasFile(requestMessage)) {
             if (GFSMessage::hasUniqueIdentifier(requestMessage)) {
-               const std::string& file = GFSMessage::getFile(requestMessage);
-               const std::string& b64FileContents = requestMessage.getTextPayload();
-               std::string directory;
-               std::string uniqueIdentifier =
+               const string& file = GFSMessage::getFile(requestMessage);
+               const string& b64FileContents = requestMessage.getTextPayload();
+               string directory;
+               string uniqueIdentifier =
                   GFSMessage::getUniqueIdentifier(requestMessage);
                
-               const std::string& fileContents = b64FileContents;
+               const string& fileContents = b64FileContents;
                
                if (!fileContents.empty() &&
                    m_server.fileAdd(file, fileContents, directory, uniqueIdentifier)) {
@@ -106,10 +107,10 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_UPDATE) {
          if (GFSMessage::hasFile(requestMessage)) {
             if (GFSMessage::hasDirectory(requestMessage)) {
-               std::string directory = GFSMessage::getDirectory(requestMessage);
-               std::string file = GFSMessage::getFile(requestMessage);
-               const std::string& fileContents = requestMessage.getTextPayload();
-               std::string uniqueIdentifier;
+               string directory = GFSMessage::getDirectory(requestMessage);
+               string file = GFSMessage::getFile(requestMessage);
+               const string& fileContents = requestMessage.getTextPayload();
+               string uniqueIdentifier;
                
                if (m_server.fileUpdate(fileContents, directory, file, uniqueIdentifier)) {
                   encodeBool(responseMessage, true);
@@ -128,9 +129,9 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_DELETE) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
-               const std::string& directory =
+               const string& directory =
                   GFSMessage::getDirectory(requestMessage);
-               const std::string& file = GFSMessage::getFile(requestMessage);
+               const string& file = GFSMessage::getFile(requestMessage);
                
                if (m_server.fileDelete(directory, file)) {
                   encodeBool(responseMessage, true);
@@ -146,10 +147,10 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_ID) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
-               const std::string& directory =
+               const string& directory =
                   GFSMessage::getDirectory(requestMessage);
-               const std::string& file = GFSMessage::getFile(requestMessage);
-               std::string uniqueIdentifier;
+               const string& file = GFSMessage::getFile(requestMessage);
+               string uniqueIdentifier;
                
                if (m_server.fileUniqueIdentifier(directory, file, uniqueIdentifier)) {
                   encodeSuccess(responseMessage);
@@ -166,9 +167,9 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_STAT) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
-               //const std::string& directory =
+               //const string& directory =
                //   GFSMessage::getDirectory(requestMessage);
-               //const std::string& file = GFSMessage::getFile(requestMessage);
+               //const string& file = GFSMessage::getFile(requestMessage);
                encodeError(responseMessage, ERR_NOT_IMPLEMENTED);
             } else {
                encodeError(responseMessage, ERR_MISSING_FILE);
@@ -178,9 +179,9 @@ public:
          }
       } else if (requestName == GFSMessageCommands::MSG_FILE_LIST) {
          if (GFSMessage::hasDirectory(requestMessage)) {
-            const std::string& directory =
+            const string& directory =
                GFSMessage::getDirectory(requestMessage);
-            std::vector<std::string> listFiles;
+            vector<string> listFiles;
             
             if (m_server.fileList(directory, listFiles)) {
                encodeSuccess(responseMessage);
@@ -194,11 +195,11 @@ public:
       } else if (requestName == GFSMessageCommands::MSG_FILE_RETRIEVE) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
-               const std::string& directory =
+               const string& directory =
                   GFSMessage::getDirectory(requestMessage);
-               const std::string& fileName =
+               const string& fileName =
                   GFSMessage::getFile(requestMessage);
-               std::string fileContents;
+               string fileContents;
                if (m_server.retrieveFileContents(directory, fileName, fileContents)) {
                   encodeSuccess(responseMessage);
                   responsePayload = fileContents;
@@ -230,7 +231,7 @@ GFSServer::~GFSServer() {
 
 //******************************************************************************
 
-bool GFSServer::initializeDirectory(const std::string& directory) {
+bool GFSServer::initializeDirectory(const string& directory) {
    const int numDirs = 100;
    int createdDirs = 0;
    char buffer[20];
@@ -238,9 +239,9 @@ bool GFSServer::initializeDirectory(const std::string& directory) {
    for (int i = 0; i < numDirs; ++i) {
       ::memset(buffer, 0, 20);
       ::snprintf(buffer, 20, "%02d", i);
-      std::string dirName = buffer;
+      string dirName = buffer;
       
-      std::string dirPath = directory;
+      string dirPath = directory;
       dirPath += "/";
       dirPath += dirName;
       
@@ -256,9 +257,9 @@ bool GFSServer::initializeDirectory(const std::string& directory) {
 
 //******************************************************************************
 
-bool GFSServer::run(const std::string& directory,
-                    const std::string& iniFilePath,
-                    const std::string& serviceName) {
+bool GFSServer::run(const string& directory,
+                    const string& iniFilePath,
+                    const string& serviceName) {
    if (OSUtils::directoryExists(directory)) {
       if (OSUtils::pathExists(iniFilePath)) {
          m_baseDir = directory;
@@ -272,7 +273,7 @@ bool GFSServer::run(const std::string& directory,
                if (entry->d_type & DT_DIR) {
                   if ((::strcmp(entry->d_name, "..") != 0) &&
                       (::strcmp(entry->d_name, ".") != 0)) {
-                     m_listSubdirs.push_back(std::string(entry->d_name));
+                     m_listSubdirs.push_back(string(entry->d_name));
                   }
                }
             }
@@ -287,13 +288,13 @@ bool GFSServer::run(const std::string& directory,
          const int rc = server.run();
          return (rc == 0);
       } else {
-         Logger::error(std::string("ini file path does not exist: '") +
+         Logger::error(string("ini file path does not exist: '") +
                        iniFilePath +
-                       std::string("'"));
+                       string("'"));
          return false;
       }
    } else {
-      Logger::error(std::string("directory to serve does not exist: ") +
+      Logger::error(string("directory to serve does not exist: ") +
                     directory);
       return false;
    }
@@ -301,14 +302,14 @@ bool GFSServer::run(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::dirStat(const std::string& directory) {
+bool GFSServer::dirStat(const string& directory) {
    //TODO: implement dirStat
    return false;
 }
 
 //******************************************************************************
 
-bool GFSServer::dirList(std::vector<std::string>& listDirectories) {
+bool GFSServer::dirList(vector<string>& listDirectories) {
    if (m_debugPrint) {
       Logger::debug("dirList called");
    }
@@ -321,16 +322,16 @@ bool GFSServer::dirList(std::vector<std::string>& listDirectories) {
    if ((dir = ::opendir(pszDirPath)) != nullptr) {
       while ((entry = ::readdir(dir)) != nullptr) {
          if (entry->d_type & DT_DIR) {
-            listDirectories.push_back(std::string(entry->d_name));
+            listDirectories.push_back(string(entry->d_name));
          }
       }
       
       ::closedir(dir);
       success = true;
    } else {
-      Logger::error(std::string("unable to open directory '") +
-                    std::string(pszDirPath) +
-                    std::string("'"));
+      Logger::error(string("unable to open directory '") +
+                    string(pszDirPath) +
+                    string("'"));
    }
 
    return success;
@@ -338,10 +339,10 @@ bool GFSServer::dirList(std::vector<std::string>& listDirectories) {
 
 //******************************************************************************
 
-bool GFSServer::getPathForFile(const std::string& directory,
-                               const std::string& file,
-                               std::string& filePath) {
-   std::string dirPath = m_baseDir;
+bool GFSServer::getPathForFile(const string& directory,
+                               const string& file,
+                               string& filePath) {
+   string dirPath = m_baseDir;
    
    if (!directory.empty()) {
       if (!StrUtils::endsWith(dirPath, SLASH) &&
@@ -359,10 +360,10 @@ bool GFSServer::getPathForFile(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::fileUniqueIdentifier(const std::string& directory,
-                                     const std::string& file,
-                                     std::string& uniqueIdentifier) {
-   std::string filePath;
+bool GFSServer::fileUniqueIdentifier(const string& directory,
+                                     const string& file,
+                                     string& uniqueIdentifier) {
+   string filePath;
    if (getPathForFile(directory, file, filePath)) {
       return GFS::uniqueIdentifierForFile(filePath, uniqueIdentifier);
    } else {
@@ -372,9 +373,9 @@ bool GFSServer::fileUniqueIdentifier(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::writeFile(const std::string& filePath,
-                          const std::string& fileContents,
-                          std::string& uniqueIdentifier) {
+bool GFSServer::writeFile(const string& filePath,
+                          const string& fileContents,
+                          string& uniqueIdentifier) {
    FILE* f = ::fopen(filePath.c_str(), "wt");
    if (f != nullptr) {
       const size_t objectsWritten = 
@@ -386,7 +387,7 @@ bool GFSServer::writeFile(const std::string& filePath,
          ::fclose(f);
          f = nullptr;
 
-         std::string storedFileId;
+         string storedFileId;
          if (GFS::uniqueIdentifierForFile(filePath, storedFileId)) {
             uniqueIdentifier = storedFileId;
             return true;
@@ -414,19 +415,19 @@ bool GFSServer::writeFile(const std::string& filePath,
 
 //******************************************************************************
 
-long GFSServer::referenceCountForFile(const std::string& filePath) {
+long GFSServer::referenceCountForFile(const string& filePath) {
    return m_fileReferenceCount->referenceCountForFile(filePath);
 }
 
 //******************************************************************************
 
-bool GFSServer::storeInitialReferenceCount(const std::string& filePath) {
+bool GFSServer::storeInitialReferenceCount(const string& filePath) {
    return m_fileReferenceCount->storeInitialReferenceCount(filePath);
 }
 
 //******************************************************************************
 
-bool GFSServer::storeUpdatedReferenceCount(const std::string& filePath,
+bool GFSServer::storeUpdatedReferenceCount(const string& filePath,
                                            long refCountValue) {
    if (refCountValue < 1L) {
       return false;
@@ -438,7 +439,7 @@ bool GFSServer::storeUpdatedReferenceCount(const std::string& filePath,
 
 //******************************************************************************
 
-bool GFSServer::incrementReferenceCount(const std::string& filePath) {
+bool GFSServer::incrementReferenceCount(const string& filePath) {
    long refCountValue = referenceCountForFile(filePath);
    if (refCountValue < 1L) {
       return false;
@@ -451,7 +452,7 @@ bool GFSServer::incrementReferenceCount(const std::string& filePath) {
 
 //******************************************************************************
 
-bool GFSServer::decrementReferenceCount(const std::string& filePath) {
+bool GFSServer::decrementReferenceCount(const string& filePath) {
    long refCountValue = referenceCountForFile(filePath);
    if (refCountValue < 1L) {
       return false;
@@ -464,10 +465,10 @@ bool GFSServer::decrementReferenceCount(const std::string& filePath) {
 
 //******************************************************************************
 
-bool GFSServer::fileAdd(const std::string& fileName,
-                        const std::string& fileContents,
-                        std::string& directory,
-                        std::string& uniqueIdentifier) {
+bool GFSServer::fileAdd(const string& fileName,
+                        const string& fileContents,
+                        string& directory,
+                        string& uniqueIdentifier) {
    if (m_debugPrint) {
       Logger::debug("fileAdd called");
    }
@@ -477,7 +478,7 @@ bool GFSServer::fileAdd(const std::string& fileName,
       return false;
    }
    
-   std::string dirName;
+   string dirName;
    int digitsFound = 0;
    
    const int uniqueIdLength = uniqueIdentifier.length();
@@ -511,7 +512,7 @@ bool GFSServer::fileAdd(const std::string& fileName,
    
    directory = dirName;
 
-   std::string filePath;
+   string filePath;
    getPathForFile(directory, fileName, filePath);
    
    if (filePath.empty()) {
@@ -525,7 +526,7 @@ bool GFSServer::fileAdd(const std::string& fileName,
       bool rc = incrementReferenceCount(filePath);
       return rc;
    } else {
-      std::string nodeUniqueIdentifier;
+      string nodeUniqueIdentifier;
       if (writeFile(filePath, fileContents, nodeUniqueIdentifier)) {
          const bool refCountStored = storeInitialReferenceCount(filePath);
          if (refCountStored) {
@@ -543,10 +544,10 @@ bool GFSServer::fileAdd(const std::string& fileName,
 
 //******************************************************************************
 
-bool GFSServer::fileUpdate(const std::string& fileContents,
-                           std::string& directory,
-                           std::string& fileName,
-                           std::string& uniqueIdentifier) {
+bool GFSServer::fileUpdate(const string& fileContents,
+                           string& directory,
+                           string& fileName,
+                           string& uniqueIdentifier) {
    if (m_debugPrint) {
       Logger::debug("fileUpdate called");
    }
@@ -556,7 +557,7 @@ bool GFSServer::fileUpdate(const std::string& fileContents,
    // identifier of the file contents, an update of the data will mean
    // that the data will be stored in a new directory and file.
    
-   const std::string uniqueIDFileContents =
+   const string uniqueIDFileContents =
       GFS::uniqueIdentifierForString(fileContents);
    
    if (uniqueIDFileContents != fileName) {
@@ -575,13 +576,13 @@ bool GFSServer::fileUpdate(const std::string& fileContents,
 
 //******************************************************************************
 
-bool GFSServer::fileDelete(const std::string& directory,
-                           const std::string& fileName) {
+bool GFSServer::fileDelete(const string& directory,
+                           const string& fileName) {
    if (m_debugPrint) {
       Logger::debug("fileDelete called");
    }
    
-   std::string filePath;
+   string filePath;
    getPathForFile(directory, fileName, filePath);
 
    if (OSUtils::pathExists(filePath)) {
@@ -605,13 +606,13 @@ bool GFSServer::fileDelete(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::fileStat(const std::string& directory,
-                         const std::string& fileName) {
+bool GFSServer::fileStat(const string& directory,
+                         const string& fileName) {
    if (m_debugPrint) {
       Logger::debug("fileStat called");
    }
    
-   std::string filePath;
+   string filePath;
    getPathForFile(directory, fileName, filePath);
    
    if (OSUtils::pathExists(filePath)) {
@@ -624,13 +625,13 @@ bool GFSServer::fileStat(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::fileList(const std::string& directory,
-                         std::vector<std::string>& listFiles) {
+bool GFSServer::fileList(const string& directory,
+                         vector<string>& listFiles) {
    if (m_debugPrint) {
       Logger::debug("fileList called");
    }
    
-   std::string dirPath = m_baseDir;
+   string dirPath = m_baseDir;
    
    if (!directory.empty()) {
       if (!StrUtils::endsWith(dirPath, SLASH) &&
@@ -652,16 +653,16 @@ bool GFSServer::fileList(const std::string& directory,
    if ((dir = ::opendir(pszDirPath)) != nullptr) {
       while ((entry = ::readdir(dir)) != nullptr) {
          if (!(entry->d_type & DT_DIR)) {
-            listFiles.push_back(std::string(entry->d_name));
+            listFiles.push_back(string(entry->d_name));
          }
       }
       
       ::closedir(dir);
       success = true;
    } else {
-      Logger::error(std::string("unable to open directory '") +
-                    std::string(pszDirPath) +
-                    std::string("'"));
+      Logger::error(string("unable to open directory '") +
+                    string(pszDirPath) +
+                    string("'"));
    }
 
    return success;
@@ -669,9 +670,9 @@ bool GFSServer::fileList(const std::string& directory,
 
 //******************************************************************************
 
-bool GFSServer::retrieveFileContents(const std::string& directory,
-                                     const std::string& fileName,
-                                     std::string& fileContents) {
+bool GFSServer::retrieveFileContents(const string& directory,
+                                     const string& fileName,
+                                     string& fileContents) {
    bool retrievalSuccess = false;
    
    if (directory.empty()) {
@@ -684,7 +685,7 @@ bool GFSServer::retrieveFileContents(const std::string& directory,
       return false;
    }
    
-   std::string filePath;
+   string filePath;
    getPathForFile(directory, fileName, filePath);
    
    if (filePath.empty()) {

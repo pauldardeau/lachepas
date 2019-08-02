@@ -42,10 +42,12 @@
 
 #define FILE_BLOCK_SIZE PAGE_SIZE_4X
 
-static const std::string DB_FILE                = "gfs_db.sqlite3";
+using namespace std;
 
-static const std::string EMPTY_STRING           = "";
-static const std::string SINGLE_QUOTE           = "'";
+static const string DB_FILE                = "gfs_db.sqlite3";
+
+static const string EMPTY_STRING           = "";
+static const string SINGLE_QUOTE           = "'";
 
 static const char FLAG_BLOCK_ALL        = 'A'; // process all blocks
 static const char FLAG_BLOCK_NONE       = 'N'; // process no blocks
@@ -60,24 +62,24 @@ using namespace tonnerre;
 
 //******************************************************************************
 
-std::string Decrypt(const std::string& cipherText,
-                    const std::string& encryptionKey) {
+string Decrypt(const string& cipherText,
+               const string& encryptionKey) {
    //TODO: implement Decrypt
    return EMPTY_STRING;
 }
 
 //******************************************************************************
 
-std::string Encrypt(const std::string& fileContents,
-                    const std::string& encryptionKey,
-                    int& padChars) {
+string Encrypt(const string& fileContents,
+               const string& encryptionKey,
+               int& padChars) {
    aes256_context ctx;
    bool encrypting = true;
    int offset = 0;
    uint8_t key[32];
    uint8_t buffer[16];
    char cipherChars[17];
-   std::string cipherText;
+   string cipherText;
    
    if (encryptionKey.length() < 32) {
       ::printf("error: encryption key must be 32 bytes\n");
@@ -114,7 +116,7 @@ std::string Encrypt(const std::string& fileContents,
       ::memcpy(cipherChars, buffer, 16);
       cipherChars[16] = '\0';
       
-      cipherText += std::string(cipherChars);
+      cipherText += string(cipherChars);
       
       ::aes256_done(&ctx);
       
@@ -175,12 +177,12 @@ GFSClient::GFSClient(const GFSOptions& gfsOptions) :
    }
    
    if (m_debugPrint) {
-      Logger::debug(std::string("baseDir = '") +
+      Logger::debug(string("baseDir = '") +
                     m_baseDir +
                     SINGLE_QUOTE);
    }
    
-   const std::string& configFile = gfsOptions.getConfigFile();
+   const string& configFile = gfsOptions.getConfigFile();
    
    if (!configFile.empty()) {
       if (OSUtils::pathExists(configFile)) {
@@ -192,7 +194,7 @@ GFSClient::GFSClient(const GFSOptions& gfsOptions) :
             return;
          }
          
-         Logger::info(std::string("initializing database with file: '") +
+         Logger::info(string("initializing database with file: '") +
                       m_metaDataDBFile +
                       SINGLE_QUOTE);
          
@@ -223,7 +225,7 @@ GFSClient::GFSClient(const GFSOptions& gfsOptions) :
             Logger::error("unable to open database");
          }
       } else {
-         Logger::error(std::string("config file doesn't exist '") +
+         Logger::error(string("config file doesn't exist '") +
                        configFile +
                        SINGLE_QUOTE);
       }
@@ -245,7 +247,7 @@ void GFSClient::initializeDirectory() {
       return;
    }
    
-   const std::string& directory = m_gfsOptions.getDirectory();
+   const string& directory = m_gfsOptions.getDirectory();
    
    if (!directory.empty()) {
       bool dirInitialized = false;
@@ -289,20 +291,20 @@ void GFSClient::initializeDirectory() {
 //******************************************************************************
 
 int GFSClient::sendFile(int numBlockFiles,
-                        const std::string& filePath,
+                        const string& filePath,
                         bool encrypt,
-                        std::string& nodeBlockFlags,
-                        std::map<int, VaultFile>& mapVaultIdToVaultFile,
+                        string& nodeBlockFlags,
+                        map<int, VaultFile>& mapVaultIdToVaultFile,
                         chaudiere::DateTime& createTime,
                         chaudiere::DateTime& modifyTime) {
    FILE* f = nullptr;
    char fileBuffer[FILE_BLOCK_SIZE];
-   std::string fileContents;
+   string fileContents;
    
    if (numBlockFiles > 1) {
       f = ::fopen(filePath.c_str(), "rb");
       if (f == nullptr) {
-         Logger::error(std::string("unable to open file '") +
+         Logger::error(string("unable to open file '") +
                        filePath +
                        SINGLE_QUOTE);
          return 0;
@@ -310,13 +312,13 @@ int GFSClient::sendFile(int numBlockFiles,
    }
    
    // are we using encryption, if so, we need an encryption key
-   std::string encryptionKey;
+   string encryptionKey;
    if (encrypt) {
       encryptionKey = m_gfsOptions.getEncryptionKey();
    }
 
-   std::string b64FileContents;
-   std::string localUniqueIdentifier;
+   string b64FileContents;
+   string localUniqueIdentifier;
    int numNodeBlocksCopied = 0;
    const int blockSize = FILE_BLOCK_SIZE;
    
@@ -329,7 +331,7 @@ int GFSClient::sendFile(int numBlockFiles,
          fileContents = EMPTY_STRING;
 
          if (!readFile(filePath, fileContents)) {
-            Logger::error(std::string("unable to read file '") +
+            Logger::error(string("unable to read file '") +
                           filePath +
                           SINGLE_QUOTE);
             return numNodeBlocksCopied;
@@ -341,7 +343,7 @@ int GFSClient::sendFile(int numBlockFiles,
             if (encrypt) {
                padCharCount = 0;
             
-               const std::string encryptedFileContents =
+               const string encryptedFileContents =
                   Encrypt(fileContents,
                           encryptionKey,
                           padCharCount);
@@ -369,7 +371,7 @@ int GFSClient::sendFile(int numBlockFiles,
          
          if (bytesRead < blockSize) {
             if (i < (numBlockFiles-1)) {
-               Logger::error(std::string("error reading file '") +
+               Logger::error(string("error reading file '") +
                              filePath +
                              SINGLE_QUOTE);
                ::fclose(f);
@@ -380,7 +382,7 @@ int GFSClient::sendFile(int numBlockFiles,
          if (encrypt) {
             padCharCount = 0;
             
-            const std::string encryptedFileContents =
+            const string encryptedFileContents =
                Encrypt(fileContents,
                        encryptionKey,
                        padCharCount);
@@ -424,7 +426,7 @@ int GFSClient::sendFile(int numBlockFiles,
          }
          
          const StorageNode& node = *itNodeList;
-         const std::string& nodeName = node.getNodeName();
+         const string& nodeName = node.getNodeName();
          
          auto itVault = m_mapNodeToVault.find(nodeName);
          if (itVault == m_mapNodeToVault.end()) {
@@ -474,15 +476,15 @@ int GFSClient::sendFile(int numBlockFiles,
                   ++numNodeBlocksCopied;
                   
                   if (GFSMessage::hasUniqueIdentifier(response)) {
-                     const std::string& nodeUniqueIdentifier =
+                     const string& nodeUniqueIdentifier =
                         GFSMessage::getUniqueIdentifier(response);
                      
                      if (nodeUniqueIdentifier == localUniqueIdentifier) {
                         if (GFSMessage::hasDirectory(response) &&
                             GFSMessage::hasFile(response)) {
-                           const std::string& directory =
+                           const string& directory =
                               GFSMessage::getDirectory(response);
-                           const std::string& file =
+                           const string& file =
                               GFSMessage::getFile(response);
                            
                            const int vaultId = vault.getVaultId();
@@ -527,8 +529,8 @@ int GFSClient::sendFile(int numBlockFiles,
                   }
                } else {
                   if (GFSMessage::hasError(response)) {
-                     const std::string& error = GFSMessage::getError(response);
-                     Logger::error(std::string("error from node: '") +
+                     const string& error = GFSMessage::getError(response);
+                     Logger::error(string("error from node: '") +
                                    error +
                                    SINGLE_QUOTE);
                      return numNodeBlocksCopied;
@@ -537,7 +539,7 @@ int GFSClient::sendFile(int numBlockFiles,
                   }
                }
             } else {
-               Logger::error(std::string("unable to send message to service '") +
+               Logger::error(string("unable to send message to service '") +
                              nodeName +
                              SINGLE_QUOTE);
                return numNodeBlocksCopied;
@@ -555,21 +557,21 @@ int GFSClient::sendFile(int numBlockFiles,
 
 //******************************************************************************
 
-void GFSClient::scanProcessDirectory(const std::string& dirPath) {
-   //Logger::debug(std::string("scanProcessDirectory: ") + dirPath);
+void GFSClient::scanProcessDirectory(const string& dirPath) {
+   //Logger::debug(string("scanProcessDirectory: ") + dirPath);
 }
 
 //******************************************************************************
 
-bool GFSClient::readFile(const std::string& filePath,
-                         std::string& fileContents) {
+bool GFSClient::readFile(const string& filePath,
+                         string& fileContents) {
    return GFS::readFile(filePath, fileContents);
 }
 
 //******************************************************************************
 
-void GFSClient::scanProcessFile(const std::string& dirPath,
-                                const std::string& fileName,
+void GFSClient::scanProcessFile(const string& dirPath,
+                                const string& fileName,
                                 const LocalDirectory& localDirectory) {
    char path[PATH_MAX];
    const int pathLength = ::snprintf(path,
@@ -577,7 +579,7 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
                                      "%s/%s",
                                      dirPath.c_str(),
                                      fileName.c_str());
-   const std::string fullFilePath(path);
+   const string fullFilePath(path);
    
    if (!m_previewOnly) {
       Logger::debug(fullFilePath);
@@ -589,7 +591,7 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
       struct stat st;
       const int rc = ::stat(path, &st);
       if (rc == 0) {
-         const std::string relativeFilePath =
+         const string relativeFilePath =
             fullFilePath.substr(m_localDirectoryPathLength);
          
          const off_t fileSize = st.st_size;
@@ -714,8 +716,8 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
             }
          }
          
-         std::map<int, VaultFile> mapVaultIdToVaultFile;
-         std::string nodeBlockFlags(m_activeNodes.size(), FLAG_BLOCK_SELECTIVE);
+         map<int, VaultFile> mapVaultIdToVaultFile;
+         string nodeBlockFlags(m_activeNodes.size(), FLAG_BLOCK_SELECTIVE);
          
          // for each node
          auto itNodeList = m_activeNodes.cbegin();
@@ -723,7 +725,7 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
          
          for (int j = 0; itNodeList != itNodeListEnd; ++itNodeList, ++j) {
             const StorageNode& node = *itNodeList;
-            const std::string& nodeName = node.getNodeName();
+            const string& nodeName = node.getNodeName();
             
             auto itVault = m_mapNodeToVault.find(nodeName);
             if (itVault == m_mapNodeToVault.end()) {
@@ -830,7 +832,7 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
          
          //m_dataAccess->commit();
       } else {
-         Logger::error(std::string("unable to stat file '") +
+         Logger::error(string("unable to stat file '") +
                        path +
                        SINGLE_QUOTE);
       }
@@ -839,7 +841,7 @@ void GFSClient::scanProcessFile(const std::string& dirPath,
 
 //******************************************************************************
 
-void GFSClient::scanDir(const std::string& dirPath,
+void GFSClient::scanDir(const string& dirPath,
                         const LocalDirectory& localDirectory) {
    const bool recurse = localDirectory.getRecurse();
    const char* pszDirPath = dirPath.c_str();
@@ -865,10 +867,10 @@ void GFSClient::scanDir(const std::string& dirPath,
                if (pathLength >= PATH_MAX) {
                   ::fprintf(stderr, "Path length too long: %s\n", path);
                } else {
-                  scanProcessDirectory(std::string(path));
+                  scanProcessDirectory(string(path));
 
                   if (recurse) {
-                     const std::string dirName = std::string(entry->d_name);
+                     const string dirName = string(entry->d_name);
                      const bool excludeDir = m_exclusions.excludeDirectory(dirName);
                      
                      if (!excludeDir) {
@@ -882,7 +884,7 @@ void GFSClient::scanDir(const std::string& dirPath,
          } else {
             // regular file?
             if (entry->d_type & DT_REG) {
-               const std::string fileName(entry->d_name);
+               const string fileName(entry->d_name);
                if (m_exclusions.excludeFile(fileName)) {
                   if (!m_previewOnly) {
                      ::printf("excluding file: '%s'\n", fileName.c_str());
@@ -898,8 +900,8 @@ void GFSClient::scanDir(const std::string& dirPath,
       
       ::closedir(dir);
    } else {
-      Logger::error(std::string("unable to open directory '") +
-                    std::string(pszDirPath) +
+      Logger::error(string("unable to open directory '") +
+                    string(pszDirPath) +
                     SINGLE_QUOTE);
    }
 }
@@ -907,7 +909,7 @@ void GFSClient::scanDir(const std::string& dirPath,
 //******************************************************************************
 
 void GFSClient::sync() {
-   const std::string& directory = m_gfsOptions.getDirectory();
+   const string& directory = m_gfsOptions.getDirectory();
    
    if (!directory.empty()) {
       const int localDirectoryIndex = indexForLocalDirectory(directory);
@@ -930,7 +932,7 @@ void GFSClient::sync() {
          }
          
          // see if we have any directories or files that need to be excluded
-         const std::string& configFile =
+         const string& configFile =
             m_gfsOptions.getConfigFile();
    
          if (!configFile.empty()) {
@@ -950,7 +952,7 @@ void GFSClient::sync() {
          
          for (; itNodeList != itNodeListEnd; ++itNodeList) {
             const StorageNode& node = *itNodeList;
-            const std::string& nodeName = node.getNodeName();
+            const string& nodeName = node.getNodeName();
             const int storageNodeId = node.getStorageNodeId();
             
             // if we don't have an existing vault for this storage
@@ -978,7 +980,7 @@ void GFSClient::sync() {
          if (!m_mapNodeToVault.empty()) {
             m_localDirectoryPathLength = directory.size();
          
-            Logger::info(std::string("scanning directory '") +
+            Logger::info(string("scanning directory '") +
                          directory +
                          SINGLE_QUOTE);
             scanDir(directory, localDirectory);
@@ -1001,7 +1003,7 @@ void GFSClient::listFiles() {
       return;
    }
    
-   const std::string& directory = m_gfsOptions.getDirectory();
+   const string& directory = m_gfsOptions.getDirectory();
    
    if (!directory.empty()) {
       if (!m_activeDirectories.empty()) {
@@ -1010,13 +1012,13 @@ void GFSClient::listFiles() {
             const LocalDirectory& localDirectory =
                m_activeDirectories[dirIndex];
             const int dirId = localDirectory.getLocalDirectoryId();
-            std::vector<LocalFile> listFiles;
+            vector<LocalFile> listFiles;
             if (m_dataAccess->getLocalFilesForDirectory(dirId, listFiles)) {
                auto it = listFiles.cbegin();
                const auto itEnd = listFiles.cend();
                for (; it != itEnd; ++it) {
                   const LocalFile& localFile = *it;
-                  const std::string& filePath = localFile.getFilePath();
+                  const string& filePath = localFile.getFilePath();
                   Logger::debug(filePath);
                }
             } else {
@@ -1045,7 +1047,7 @@ StorageNode& GFSClient::getActiveStorageNode(int index) {
 
 //******************************************************************************
 
-bool GFSClient::getActiveStorageNodes(std::vector<StorageNode>& vecStorageNodes) {
+bool GFSClient::getActiveStorageNodes(vector<StorageNode>& vecStorageNodes) {
    bool success = false;
    
    if (m_dataAccess != nullptr) {
@@ -1063,7 +1065,7 @@ bool GFSClient::getActiveStorageNodes(std::vector<StorageNode>& vecStorageNodes)
 
 //******************************************************************************
 
-bool GFSClient::getInactiveStorageNodes(std::vector<StorageNode>& vecStorageNodes) {
+bool GFSClient::getInactiveStorageNodes(vector<StorageNode>& vecStorageNodes) {
    bool success = false;
    
    if (m_dataAccess != nullptr) {
@@ -1111,7 +1113,7 @@ LocalDirectory& GFSClient::getActiveLocalDirectory(int index) {
 
 //******************************************************************************
 
-bool GFSClient::getActiveLocalDirectories(std::vector<LocalDirectory>& vecLocalDirectories,
+bool GFSClient::getActiveLocalDirectories(vector<LocalDirectory>& vecLocalDirectories,
                                           bool refresh) {
    bool success = false;
    
@@ -1148,7 +1150,7 @@ bool GFSClient::getActiveLocalDirectories(std::vector<LocalDirectory>& vecLocalD
 
 //******************************************************************************
 
-bool GFSClient::getInactiveLocalDirectories(std::vector<LocalDirectory>& vecLocalDirectories) {
+bool GFSClient::getInactiveLocalDirectories(vector<LocalDirectory>& vecLocalDirectories) {
    bool success = false;
    
    if (m_dataAccess != nullptr) {
@@ -1247,7 +1249,7 @@ bool GFSClient::updateLocalDirectory(LocalDirectory& localDirectory) {
 bool GFSClient::listNodeDirectories() {
    bool success = false;
    
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(GFSMessageCommands::MSG_DIR_LIST, MessageType::MessageTypeText);
@@ -1256,7 +1258,7 @@ bool GFSClient::listNodeDirectories() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasDirList(response)) {
-               std::vector<std::string> listDirectories;
+               vector<string> listDirectories;
                if (GFSMessage::getDirList(response, listDirectories)) {
                   const int numDirs = listDirectories.size();
                   for (int i = 0; i < numDirs; ++i) {
@@ -1286,10 +1288,10 @@ bool GFSClient::listNodeDirectories() {
 bool GFSClient::listNodeDirFiles() {
    bool success = false;
    
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      const std::string& directory = m_gfsOptions.getDirectory();
+      const string& directory = m_gfsOptions.getDirectory();
       
       if (!directory.empty()) {
          Message message(GFSMessageCommands::MSG_FILE_LIST, MessageType::MessageTypeText);
@@ -1299,7 +1301,7 @@ bool GFSClient::listNodeDirFiles() {
          if (message.send(nodeName, response)) {
             if (GFSMessage::getRC(response)) {
                if (GFSMessage::hasFileList(response)) {
-                  std::vector<std::string> listFiles;
+                  vector<string> listFiles;
                   if (GFSMessage::getFileList(response, listFiles)) {
                      const int numFiles = listFiles.size();
                      for (int i = 0; i < numFiles; ++i) {
@@ -1330,10 +1332,10 @@ bool GFSClient::listNodeDirFiles() {
 //******************************************************************************
 
 void GFSClient::addStorageNode() {
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
 
    if (!nodeName.empty()) {
-      Logger::debug(std::string("addStorageNode '") +
+      Logger::debug(string("addStorageNode '") +
                     nodeName +
                     SINGLE_QUOTE);
       
@@ -1372,10 +1374,10 @@ void GFSClient::addStorageNode() {
 void GFSClient::removeStorageNode() {
    //Logger::debug("removeStorageNode called");
    
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
 
    if (!nodeName.empty()) {
-      Logger::debug(std::string("removeStorageNode '") + nodeName + SINGLE_QUOTE);
+      Logger::debug(string("removeStorageNode '") + nodeName + SINGLE_QUOTE);
       
       // is the node defined?
       const int nodeIndex = indexForStorageNode(nodeName);
@@ -1400,7 +1402,7 @@ void GFSClient::removeStorageNode() {
 
 //******************************************************************************
 
-int GFSClient::indexForStorageNode(const std::string& nodeName) {
+int GFSClient::indexForStorageNode(const string& nodeName) {
    int nodeIndex = -1;
    auto it = m_activeNodes.cbegin();
    const auto itEnd = m_activeNodes.cend();
@@ -1420,7 +1422,7 @@ int GFSClient::indexForStorageNode(const std::string& nodeName) {
 
 //******************************************************************************
 
-int GFSClient::indexForLocalDirectory(const std::string& dirPath) {
+int GFSClient::indexForLocalDirectory(const string& dirPath) {
    int dirIndex = -1;
    auto it = m_activeDirectories.cbegin();
    const auto itEnd = m_activeDirectories.cend();
@@ -1443,9 +1445,9 @@ int GFSClient::indexForLocalDirectory(const std::string& dirPath) {
 bool GFSClient::restore() {
    bool success = false;
    
-   const std::string& nodeName = m_gfsOptions.getNode();
-   const std::string& sourceDirectory = m_gfsOptions.getDirectory();
-   const std::string& targetDirectory = m_gfsOptions.getTargetDirectory();
+   const string& nodeName = m_gfsOptions.getNode();
+   const string& sourceDirectory = m_gfsOptions.getDirectory();
+   const string& targetDirectory = m_gfsOptions.getTargetDirectory();
 
    if (!nodeName.empty()) {
       if (!sourceDirectory.empty()) {
@@ -1476,7 +1478,7 @@ bool GFSClient::restore() {
             // valid target directory?
             //TODO: validate target directory
             
-            const std::string& encryptionKey = m_gfsOptions.getEncryptionKey();
+            const string& encryptionKey = m_gfsOptions.getEncryptionKey();
             const StorageNode& storageNode = m_activeNodes[nodeIndex];
             const LocalDirectory& sourceDirectory = m_activeDirectories[sourceDirectoryIndex];
             
@@ -1497,11 +1499,11 @@ bool GFSClient::restore() {
 
 //******************************************************************************
 
-bool GFSClient::restoreSubdirectory(const std::string& dirPath) {
+bool GFSClient::restoreSubdirectory(const string& dirPath) {
    bool success = false;
    
-   const std::string& nodeName = m_gfsOptions.getNode();
-   const std::string& vaultDirectory = m_gfsOptions.getDirectory();
+   const string& nodeName = m_gfsOptions.getNode();
+   const string& vaultDirectory = m_gfsOptions.getDirectory();
 
    if (!nodeName.empty()) {
       if (!vaultDirectory.empty()) {
@@ -1525,9 +1527,9 @@ bool GFSClient::restoreSubdirectory(const std::string& dirPath) {
 bool GFSClient::restoreFile() {
    bool success = false;
    
-   const std::string& nodeName = m_gfsOptions.getNode();
-   const std::string& directory = m_gfsOptions.getDirectory();
-   const std::string& filePath = m_gfsOptions.getFile();
+   const string& nodeName = m_gfsOptions.getNode();
+   const string& directory = m_gfsOptions.getDirectory();
+   const string& filePath = m_gfsOptions.getFile();
 
    if (!nodeName.empty()) {
       if (!directory.empty()) {
@@ -1548,10 +1550,10 @@ bool GFSClient::restoreFile() {
 
 //******************************************************************************
 
-bool GFSClient::retrieveFile(const std::string& nodeName,
-                             const std::string& directory,
-                             const std::string& fileName,
-                             std::string& fileContents) {
+bool GFSClient::retrieveFile(const string& nodeName,
+                             const string& directory,
+                             const string& fileName,
+                             string& fileContents) {
    bool success = false;
    
    if (!nodeName.empty()) {
@@ -1587,10 +1589,10 @@ bool GFSClient::retrieveFile(const std::string& nodeName,
 
 //******************************************************************************
 
-bool GFSClient::fullRestore(const std::string& encryptionKey,
+bool GFSClient::fullRestore(const string& encryptionKey,
                             const StorageNode& storageNode,
                             const LocalDirectory& sourceDirectory,
-                            const std::string& targetDirectory) {
+                            const string& targetDirectory) {
    bool success = false;
    
    const int nodeIndex = storageNode.getStorageNodeId();
@@ -1600,19 +1602,19 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
    if (m_dataAccess->getVault(nodeIndex, sourceDirectoryId, vault)) {
       const bool encrypted = vault.getEncrypt();
       const int vaultId = vault.getVaultId();
-      std::vector<LocalFile> listLocalFiles;
+      vector<LocalFile> listLocalFiles;
       if (m_dataAccess->getLocalFilesForDirectory(sourceDirectoryId,
                                                   listLocalFiles)) {
          if (!listLocalFiles.empty()) {
-            const std::string& nodeName = storageNode.getNodeName();
+            const string& nodeName = storageNode.getNodeName();
             
             auto itLocalFile = listLocalFiles.cbegin();
             const auto itLocalFileEnd = listLocalFiles.cend();
-            const std::string FILE_DIR_DELIMITER = "/";
+            const string FILE_DIR_DELIMITER = "/";
             
             for (; itLocalFile != itLocalFileEnd; ++itLocalFile) {
                const LocalFile& localFile = *itLocalFile;
-               const std::string& localFilePath = localFile.getFilePath();
+               const string& localFilePath = localFile.getFilePath();
                
                StringTokenizer st(localFilePath, FILE_DIR_DELIMITER);
                const int numTokens = st.countTokens();
@@ -1620,7 +1622,7 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
                if (numTokens > 1) {
                   // walk the directory path and create any subdirectories
                   // that are missing
-                  std::string dirPath = targetDirectory;
+                  string dirPath = targetDirectory;
                   const int numSubDirs = numTokens - 1;
                   
                   for (int i = 0; i < numSubDirs; ++i) {
@@ -1629,7 +1631,7 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
                      
                      if (!OSUtils::directoryExists(dirPath)) {
                         if (!OSUtils::createDirectory(dirPath)) {
-                           Logger::error(std::string("unable to create directory: ") + dirPath);
+                           Logger::error(string("unable to create directory: ") + dirPath);
                         }
                      }
                   }
@@ -1645,12 +1647,12 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
                                               vaultFile)) {
                   const int vaultFileId = vaultFile.getVaultFileId();
                   const int numBlocks = vaultFile.getBlockCount();
-                  std::vector<VaultFileBlock> listFileBlocks;
+                  vector<VaultFileBlock> listFileBlocks;
                   
                   if (m_dataAccess->getBlocksForVaultFile(vaultFileId,
                                                           listFileBlocks)) {
                      if (listFileBlocks.size() == numBlocks) {
-                        const std::string vaultFilePath =
+                        const string vaultFilePath =
                            OSUtils::pathJoin(targetDirectory, localFilePath);
                         FILE* f = ::fopen(vaultFilePath.c_str(), "wb");
                         if (f != nullptr) {
@@ -1714,14 +1716,14 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
                            
                            for (; itListFileBlocks != itListFileBlocksEnd; ++itListFileBlocks) {
                               const VaultFileBlock& vaultFileBlock = *itListFileBlocks;
-                              std::string fileContents;
+                              string fileContents;
                               
                               if (retrieveFile(nodeName,
                                                vaultFileBlock.getNodeDirectory(),
                                                vaultFileBlock.getNodeFile(),
                                                fileContents)) {
                                                   
-                                 const std::string calcUniqueId =
+                                 const string calcUniqueId =
                                     GFS::uniqueIdentifierForString(fileContents);
                                     
                                  // pass integrity check?
@@ -1729,9 +1731,9 @@ bool GFSClient::fullRestore(const std::string& encryptionKey,
                                     // does it match the stored size?
                                     if (fileContents.length() == vaultFileBlock.getStoredFileSize()) {
                                        // remove base64 encoding
-                                       const std::string unencodedFileContents =
+                                       const string unencodedFileContents =
                                           Encryption::base64Decode(fileContents);
-                                       std::string finalText;
+                                       string finalText;
                                        
                                        if (encrypted) {
                                           const int padCharCount =
