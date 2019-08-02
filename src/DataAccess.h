@@ -12,10 +12,10 @@
 #include "Vault.h"
 #include "VaultFile.h"
 #include "VaultFileBlock.h"
+#include "Database.h"
 
 /**
  */
-class Database;
 
 namespace lachepas {
 
@@ -307,7 +307,7 @@ protected:
 
    
 private:
-   Database* m_dbConnection;
+   chapeau::Database* m_dbConnection;
    std::string m_dbFilePath;
    bool m_debugPrint;
    

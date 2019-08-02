@@ -462,7 +462,7 @@ int GFSClient::sendFile(int numBlockFiles,
          }
       
          if (addBlockToNode) {
-            Message message(MSG_FILE_ADD, Message::MessageType::Text);
+            Message message(MSG_FILE_ADD, MessageType::MessageTypeText);
             message.setTextPayload(b64FileContents);
             const int storedBlockSize = b64FileContents.size();
             GFSMessage::setStoredFileSize(message, storedBlockSize);
@@ -1260,7 +1260,7 @@ bool GFSClient::listNodeDirectories() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_DIR_LIST, Message::MessageType::Text);
+      Message message(MSG_DIR_LIST, MessageType::MessageTypeText);
 
       Message response;
       if (message.send(nodeName, response)) {
@@ -1302,7 +1302,7 @@ bool GFSClient::listNodeDirFiles() {
       const std::string& directory = m_gfsOptions.getDirectory();
       
       if (!directory.empty()) {
-         Message message(MSG_FILE_LIST, Message::MessageType::Text);
+         Message message(MSG_FILE_LIST, MessageType::MessageTypeText);
          GFSMessage::setDirectory(message, directory);
 
          Message response;
@@ -1567,7 +1567,7 @@ bool GFSClient::retrieveFile(const std::string& nodeName,
    if (!nodeName.empty()) {
       if (!directory.empty()) {
          if (!fileName.empty()) {
-            Message message(MSG_FILE_RETRIEVE, Message::MessageType::Text);
+            Message message(MSG_FILE_RETRIEVE, MessageType::MessageTypeText);
             GFSMessage::setDirectory(message, directory);
             GFSMessage::setFile(message, fileName);
    

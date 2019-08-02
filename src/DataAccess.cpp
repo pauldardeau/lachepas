@@ -1,6 +1,8 @@
 // Copyright Paul Dardeau, 2016
 // DataAccess.cpp
 
+#include <stddef.h>
+
 #include "AutoPointer.h"
 #include "DataAccess.h"
 #include "Logger.h"
@@ -10,6 +12,9 @@
 #include "DBNull.h"
 #include "DBStatementArgs.h"
 #include "DBString.h"
+#include "SQLiteDatabase.h"
+
+using namespace chapeau;
 
 static const std::string MSG_NO_DB_CONNECTION = "no database connection";
 
@@ -376,7 +381,7 @@ DataAccess::~DataAccess() {
 bool DataAccess::open() {
    bool dbInitialized = false;
    
-   m_dbConnection = new FMDatabase(m_dbFilePath);
+   m_dbConnection = new SQLiteDatabase(m_dbFilePath);
    if (m_dbConnection->open()) {
       //Logger::info("successfully opened database");
    

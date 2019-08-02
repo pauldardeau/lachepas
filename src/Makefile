@@ -4,7 +4,7 @@
 CC = clang
 CXX = clang++
 CC_OPTS = -c -Wall -O2
-CXX_OPTS = -c -Wall -O2 -std=c++11 -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
+CXX_OPTS = -c -Wall -O2 -std=c++11 -I/usr/local/include -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
 ARCHIVE_CMD = ar
 ARCHIVE_OPTS = rs
 
@@ -42,12 +42,14 @@ all : $(LIB_NAME)
 clean :
 	rm -f *.o
 	rm -f $(LIB_NAME)
+	cd ThirdParty/aes256 && gmake clean
+	cd ThirdParty/base64 && gmake clean
 	
 $(AES_OBJS) :
-	cd ThirdParty/aes256 && make
+	cd ThirdParty/aes256 && gmake
 
 $(BASE64_OBJS) :
-	cd ThirdParty/base64 && make
+	cd ThirdParty/base64 && gmake
 
 $(LIB_NAME) : $(OBJS) $(AES_OBJS) $(BASE64_OBJS)
 	$(ARCHIVE_CMD) $(ARCHIVE_OPTS) $(LIB_NAME) $(OBJS) $(AES_OBJS) $(BASE64_OBJS)

@@ -12,7 +12,7 @@ namespace lachepas {
 class FileSync {
 
 private:
-   DBDate m_syncTime;
+   chapeau::DBDate m_syncTime;
    int m_vaultFileId;
     
 public:

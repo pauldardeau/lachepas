@@ -144,7 +144,7 @@ bool GFSAdminClient::lastFileRetrieve() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_LAST_FILE_RETRIEVE, Message::MessageType::Text);
+      Message message(MSG_LAST_FILE_RETRIEVE, MessageType::MessageTypeText);
       Message response;
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
@@ -179,7 +179,7 @@ bool GFSAdminClient::lastFileUpdate() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_LAST_FILE_UPDATE, Message::MessageType::Text);
+      Message message(MSG_LAST_FILE_UPDATE, MessageType::MessageTypeText);
       Message response;
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
@@ -214,7 +214,7 @@ bool GFSAdminClient::listDevices() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_LIST_DEVICES, Message::MessageType::Text);
+      Message message(MSG_LIST_DEVICES, MessageType::MessageTypeText);
       Message response;
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
@@ -311,7 +311,7 @@ bool GFSAdminClient::sysInfo() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_SYS_INFO, Message::MessageType::Text);
+      Message message(MSG_SYS_INFO, MessageType::MessageTypeText);
       Message response;
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
@@ -374,7 +374,7 @@ bool GFSAdminClient::sysUptime() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_SYS_UPTIME, Message::MessageType::Text);
+      Message message(MSG_SYS_UPTIME, MessageType::MessageTypeText);
       Message response;
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
