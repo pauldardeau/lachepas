@@ -2,6 +2,7 @@
 
 #include "Data.h"
 
+using namespace std;
 using namespace lachepas;
 
 //*****************************************************************************
@@ -11,7 +12,7 @@ Data::Data() {
 
 //*****************************************************************************
 
-Data::Data(unsigned char c, std::size_t length) :
+Data::Data(unsigned char c, size_t length) :
    m_bytes(length, c) {
 }
 
@@ -40,13 +41,13 @@ Data& Data::operator=(const Data& copy) {
 
 //*****************************************************************************
 
-std::size_t Data::length() const {
+size_t Data::length() const {
    return m_bytes.size();
 }
 
 //*****************************************************************************
 
-std::size_t Data::size() const {
+size_t Data::size() const {
    return m_bytes.size();
 }
 
@@ -58,7 +59,7 @@ void Data::append(unsigned char chByte) {
 
 //*****************************************************************************
 
-void Data::append(const std::vector<unsigned char> vecBytes) {
+void Data::append(const vector<unsigned char> vecBytes) {
    m_bytes.insert(m_bytes.end(), vecBytes.begin(), vecBytes.end());
 }
 
@@ -71,9 +72,9 @@ void Data::append(const Data& data) {
 //*****************************************************************************
 
 void Data::bzero() {
-   const std::size_t numBytes = size();
+   const size_t numBytes = size();
    
-   for (std::size_t i = 0; i < numBytes; ++i) {
+   for (size_t i = 0; i < numBytes; ++i) {
       m_bytes[i] = 0;
    }
 }

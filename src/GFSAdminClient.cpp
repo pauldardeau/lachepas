@@ -32,33 +32,35 @@
 #include "GFS.h"
 #include "Encryption.h"
 
-static const std::string DB_FILE                = "gfs_db.sqlite3";
+using namespace std;
 
-static const std::string EMPTY_STRING           = "";
+static const string DB_FILE                = "gfs_db.sqlite3";
 
-static const std::string KEY_LAST_FILE_RETRIEVE = "lastRetrieve";
-static const std::string KEY_LAST_FILE_UPDATE   = "lastUpdate";
+static const string EMPTY_STRING           = "";
 
-static const std::string KEY_SYS_SYSNAME        = "sysName";
-static const std::string KEY_SYS_NODENAME       = "nodeName";
-static const std::string KEY_SYS_RELEASE        = "release";
-static const std::string KEY_SYS_VERSION        = "version";
-static const std::string KEY_SYS_MACHINE        = "machine";
+static const string KEY_LAST_FILE_RETRIEVE = "lastRetrieve";
+static const string KEY_LAST_FILE_UPDATE   = "lastUpdate";
 
-static const std::string KEY_SYS_UPTIME         = "uptime";
+static const string KEY_SYS_SYSNAME        = "sysName";
+static const string KEY_SYS_NODENAME       = "nodeName";
+static const string KEY_SYS_RELEASE        = "release";
+static const string KEY_SYS_VERSION        = "version";
+static const string KEY_SYS_MACHINE        = "machine";
 
-static const std::string MSG_LAST_FILE_RETRIEVE = "fileRetrieveLast";
-static const std::string MSG_LAST_FILE_UPDATE   = "fileUpdateLast";
+static const string KEY_SYS_UPTIME         = "uptime";
 
-static const std::string MSG_LIST_DEVICES       = "deviceList";
+static const string MSG_LAST_FILE_RETRIEVE = "fileRetrieveLast";
+static const string MSG_LAST_FILE_UPDATE   = "fileUpdateLast";
 
-static const std::string MSG_STAT_CPU           = "cpuStat";
-static const std::string MSG_STAT_DEVICE        = "deviceStat";
-static const std::string MSG_STAT_IO            = "ioStat";
-static const std::string MSG_STAT_VM            = "vmStat";
+static const string MSG_LIST_DEVICES       = "deviceList";
 
-static const std::string MSG_SYS_INFO           = "infoSys";
-static const std::string MSG_SYS_UPTIME         = "uptimeSys";
+static const string MSG_STAT_CPU           = "cpuStat";
+static const string MSG_STAT_DEVICE        = "deviceStat";
+static const string MSG_STAT_IO            = "ioStat";
+static const string MSG_STAT_VM            = "vmStat";
+
+static const string MSG_SYS_INFO           = "infoSys";
+static const string MSG_SYS_UPTIME         = "uptimeSys";
 
 
 //******************************************************************************
@@ -86,12 +88,12 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
    }
    
    if (m_debugPrint) {
-      Logger::debug(std::string("baseDir = '") +
+      Logger::debug(string("baseDir = '") +
                     m_baseDir +
-                    std::string("'"));
+                    string("'"));
    }
    
-   const std::string& configFile = gfsOptions.getConfigFile();
+   const string& configFile = gfsOptions.getConfigFile();
    
    if (!configFile.empty()) {
       if (OSUtils::pathExists(configFile)) {
@@ -103,9 +105,9 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
             return;
          }
          
-         Logger::info(std::string("initializing database with file: '") +
+         Logger::info(string("initializing database with file: '") +
                       m_metaDataDBFile +
-                      std::string("'"));
+                      string("'"));
          
          m_dataAccess = new DataAccess(m_metaDataDBFile);
          if (m_dataAccess->open()) {
@@ -123,9 +125,9 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
             Logger::error("unable to open database");
          }
       } else {
-         Logger::error(std::string("config file doesn't exist '") +
+         Logger::error(string("config file doesn't exist '") +
                        configFile +
-                       std::string("'"));
+                       string("'"));
       }
    } else {
       Logger::error("missing config file");
@@ -141,7 +143,7 @@ GFSAdminClient::~GFSAdminClient() {
 
 bool GFSAdminClient::lastFileRetrieve() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(MSG_LAST_FILE_RETRIEVE, MessageType::MessageTypeText);
@@ -149,7 +151,7 @@ bool GFSAdminClient::lastFileRetrieve() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasKey(response, KEY_LAST_FILE_RETRIEVE)) {
-               const std::string& lastFileRetrieve =
+               const string& lastFileRetrieve =
                   GFSMessage::getKeyValue(response, KEY_LAST_FILE_RETRIEVE);
                if (!lastFileRetrieve.empty()) {
                   ::printf("%s\n", lastFileRetrieve.c_str());
@@ -176,7 +178,7 @@ bool GFSAdminClient::lastFileRetrieve() {
 
 bool GFSAdminClient::lastFileUpdate() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(MSG_LAST_FILE_UPDATE, MessageType::MessageTypeText);
@@ -184,7 +186,7 @@ bool GFSAdminClient::lastFileUpdate() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasKey(response, KEY_LAST_FILE_UPDATE)) {
-               const std::string& lastFileUpdate =
+               const string& lastFileUpdate =
                   GFSMessage::getKeyValue(response, KEY_LAST_FILE_UPDATE);
                if (!lastFileUpdate.empty()) {
                   ::printf("%s\n", lastFileUpdate.c_str());
@@ -211,7 +213,7 @@ bool GFSAdminClient::lastFileUpdate() {
 
 bool GFSAdminClient::listDevices() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(MSG_LIST_DEVICES, MessageType::MessageTypeText);
@@ -219,7 +221,7 @@ bool GFSAdminClient::listDevices() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasDeviceList(response)) {
-               std::vector<std::string> listDevices;
+               vector<string> listDevices;
                if (GFSMessage::getDeviceList(response, listDevices)) {
                   const int numDevices = listDevices.size();
                   for (int i = 0; i < numDevices; ++i) {
@@ -248,7 +250,7 @@ bool GFSAdminClient::listDevices() {
 
 bool GFSAdminClient::statCpu() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       //TODO: implement statCpu
@@ -263,7 +265,7 @@ bool GFSAdminClient::statCpu() {
 
 bool GFSAdminClient::statDevice() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       //TODO: implement statDevice
@@ -278,7 +280,7 @@ bool GFSAdminClient::statDevice() {
 
 bool GFSAdminClient::statIO() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       //TODO: implement statIO
@@ -293,7 +295,7 @@ bool GFSAdminClient::statIO() {
 
 bool GFSAdminClient::statVM() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       //TODO: implement statVM
@@ -308,7 +310,7 @@ bool GFSAdminClient::statVM() {
 
 bool GFSAdminClient::sysInfo() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(MSG_SYS_INFO, MessageType::MessageTypeText);
@@ -316,7 +318,7 @@ bool GFSAdminClient::sysInfo() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasKey(response, KEY_SYS_SYSNAME)) {
-               const std::string& sysName =
+               const string& sysName =
                   GFSMessage::getKeyValue(response, KEY_SYS_SYSNAME);
                if (!sysName.empty()) {
                   ::printf("sysName: %s\n", sysName.c_str());
@@ -324,7 +326,7 @@ bool GFSAdminClient::sysInfo() {
             }
             
             if (GFSMessage::hasKey(response, KEY_SYS_NODENAME)) {
-               const std::string& nodeName =
+               const string& nodeName =
                   GFSMessage::getKeyValue(response, KEY_SYS_NODENAME);
                if (!nodeName.empty()) {
                   ::printf("nodeName: %s\n", nodeName.c_str());
@@ -332,7 +334,7 @@ bool GFSAdminClient::sysInfo() {
             }
 
             if (GFSMessage::hasKey(response, KEY_SYS_RELEASE)) {
-               const std::string& release =
+               const string& release =
                   GFSMessage::getKeyValue(response, KEY_SYS_RELEASE);
                if (!release.empty()) {
                   ::printf("release: %s\n", release.c_str());
@@ -340,7 +342,7 @@ bool GFSAdminClient::sysInfo() {
             }
 
             if (GFSMessage::hasKey(response, KEY_SYS_VERSION)) {
-               const std::string& version =
+               const string& version =
                   GFSMessage::getKeyValue(response, KEY_SYS_VERSION);
                if (!version.empty()) {
                   ::printf("version: %s\n", version.c_str());
@@ -348,7 +350,7 @@ bool GFSAdminClient::sysInfo() {
             }
 
             if (GFSMessage::hasKey(response, KEY_SYS_MACHINE)) {
-               const std::string& machine =
+               const string& machine =
                   GFSMessage::getKeyValue(response, KEY_SYS_MACHINE);
                if (!machine.empty()) {
                   ::printf("machine: %s\n", machine.c_str());
@@ -371,7 +373,7 @@ bool GFSAdminClient::sysInfo() {
 
 bool GFSAdminClient::sysUptime() {
    bool success = false;
-   const std::string& nodeName = m_gfsOptions.getNode();
+   const string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
       Message message(MSG_SYS_UPTIME, MessageType::MessageTypeText);
@@ -379,7 +381,7 @@ bool GFSAdminClient::sysUptime() {
       if (message.send(nodeName, response)) {
          if (GFSMessage::getRC(response)) {
             if (GFSMessage::hasKey(response, KEY_SYS_UPTIME)) {
-               const std::string& sysUptime =
+               const string& sysUptime =
                   GFSMessage::getKeyValue(response, KEY_SYS_UPTIME);
                if (!sysUptime.empty()) {
                   ::printf("%s\n", sysUptime.c_str());

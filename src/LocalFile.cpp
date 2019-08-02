@@ -3,6 +3,7 @@
 
 #include "LocalFile.h"
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
@@ -44,13 +45,13 @@ LocalFile& LocalFile::operator=(const LocalFile& copy) {
 
 //******************************************************************************
 
-void LocalFile::setFilePath(const std::string& filePath) {
+void LocalFile::setFilePath(const string& filePath) {
    m_filePath = filePath;
 }
 
 //******************************************************************************
 
-const std::string& LocalFile::getFilePath() const {
+const string& LocalFile::getFilePath() const {
    return m_filePath;
 }
 

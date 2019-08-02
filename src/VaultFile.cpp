@@ -3,9 +3,11 @@
 
 #include "VaultFile.h"
 
-static const std::string DEFAULT_USER_PERMISSIONS   = "rw-";
-static const std::string DEFAULT_GROUP_PERMISSIONS  = "rw-";
-static const std::string DEFAULT_OTHER_PERMISSIONS  = "r--";
+using namespace std;
+
+static const string DEFAULT_USER_PERMISSIONS   = "rw-";
+static const string DEFAULT_GROUP_PERMISSIONS  = "rw-";
+static const string DEFAULT_OTHER_PERMISSIONS  = "r--";
 
 using namespace lachepas;
 

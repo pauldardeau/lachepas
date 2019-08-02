@@ -22,40 +22,41 @@
 #include "SystemInfo.h"
 #include "SystemStats.h"
 
+using namespace std;
 using namespace lachepas;
 using namespace chaudiere;
 using namespace tonnerre;
 
-static const std::string EMPTY_STRING           = "";
-static const std::string SLASH                  = "/";
-static const std::string ZERO                   = "0";
+static const string EMPTY_STRING           = "";
+static const string SLASH                  = "/";
+static const string ZERO                   = "0";
 
-static const std::string KEY_LAST_FILE_RETRIEVE = "lastRetrieve";
-static const std::string KEY_LAST_FILE_UPDATE   = "lastUpdate";
+static const string KEY_LAST_FILE_RETRIEVE = "lastRetrieve";
+static const string KEY_LAST_FILE_UPDATE   = "lastUpdate";
 
-static const std::string KEY_SYS_SYSNAME        = "sysName";
-static const std::string KEY_SYS_NODENAME       = "nodeName";
-static const std::string KEY_SYS_RELEASE        = "release";
-static const std::string KEY_SYS_VERSION        = "version";
-static const std::string KEY_SYS_MACHINE        = "machine";
+static const string KEY_SYS_SYSNAME        = "sysName";
+static const string KEY_SYS_NODENAME       = "nodeName";
+static const string KEY_SYS_RELEASE        = "release";
+static const string KEY_SYS_VERSION        = "version";
+static const string KEY_SYS_MACHINE        = "machine";
 
-static const std::string KEY_SYS_UPTIME         = "uptime";
+static const string KEY_SYS_UPTIME         = "uptime";
 
-static const std::string MSG_LAST_FILE_RETRIEVE = "fileRetrieveLast";
-static const std::string MSG_LAST_FILE_UPDATE   = "fileUpdateLast";
+static const string MSG_LAST_FILE_RETRIEVE = "fileRetrieveLast";
+static const string MSG_LAST_FILE_UPDATE   = "fileUpdateLast";
 
-static const std::string MSG_LIST_DEVICES       = "deviceList";
+static const string MSG_LIST_DEVICES       = "deviceList";
 
-static const std::string MSG_STAT_CPU           = "cpuStat";
-static const std::string MSG_STAT_DEVICE        = "deviceStat";
-static const std::string MSG_STAT_IO            = "ioStat";
-static const std::string MSG_STAT_VM            = "vmStat";
+static const string MSG_STAT_CPU           = "cpuStat";
+static const string MSG_STAT_DEVICE        = "deviceStat";
+static const string MSG_STAT_IO            = "ioStat";
+static const string MSG_STAT_VM            = "vmStat";
 
-static const std::string MSG_SYS_INFO           = "infoSys";
-static const std::string MSG_SYS_UPTIME         = "uptimeSys";
+static const string MSG_SYS_INFO           = "infoSys";
+static const string MSG_SYS_UPTIME         = "uptimeSys";
 
-static const std::string ERR_NOT_IMPLEMENTED    = "not implemented";
-static const std::string ERR_NOT_RECOGNIZED     = "unrecognized message";
+static const string ERR_NOT_IMPLEMENTED    = "not implemented";
+static const string ERR_NOT_RECOGNIZED     = "unrecognized message";
 
 
 //******************************************************************************
@@ -73,9 +74,9 @@ public:
    
    void handleTextMessage(const Message& requestMessage,
                           Message& responseMessage,
-                          const std::string& requestName,
-                          const std::string& requestPayload,
-                          std::string& responsePayload) {
+                          const string& requestName,
+                          const string& requestPayload,
+                          string& responsePayload) {
       if (requestName == MSG_STAT_CPU) {
          encodeError(responseMessage, ERR_NOT_IMPLEMENTED);
       } else if (requestName == MSG_STAT_DEVICE) {
@@ -91,7 +92,7 @@ public:
             encodeError(responseMessage, "unable to retrieve system info");
          }
       } else if (requestName == MSG_SYS_UPTIME) {
-         std::string uptimeSeconds;
+         string uptimeSeconds;
          if (m_nodeAdmin.uptimeSys(uptimeSeconds)) {
             GFSMessage::setKeyValue(responseMessage,
                                     KEY_SYS_UPTIME,
@@ -101,7 +102,7 @@ public:
             encodeError(responseMessage, "unable to retrieve system uptime");
          }
       } else if (requestName == MSG_LIST_DEVICES) {
-         std::vector<std::string> listDevices;
+         vector<string> listDevices;
             
          if (m_nodeAdmin.deviceList(listDevices)) {
             encodeSuccess(responseMessage);
@@ -110,7 +111,7 @@ public:
             encodeError(responseMessage, "unable to obtain device list");
          }
       } else if (requestName == MSG_LAST_FILE_RETRIEVE) {
-         std::string fileRetrieveDate;
+         string fileRetrieveDate;
          if (m_nodeAdmin.lastFileRetrieve(fileRetrieveDate)) {
             GFSMessage::setKeyValue(responseMessage,
                                     KEY_LAST_FILE_RETRIEVE,
@@ -120,7 +121,7 @@ public:
             encodeError(responseMessage, "unable to obtain last file retrieve");
          }
       } else if (requestName == MSG_LAST_FILE_UPDATE) {
-         std::string fileUpdateDate;
+         string fileUpdateDate;
          if (m_nodeAdmin.lastFileUpdate(fileUpdateDate)) {
             GFSMessage::setKeyValue(responseMessage,
                                     KEY_LAST_FILE_UPDATE,
@@ -149,9 +150,9 @@ GFSNodeAdmin::~GFSNodeAdmin() {
 
 //******************************************************************************
 
-bool GFSNodeAdmin::run(const std::string& directory,
-                       const std::string& iniFilePath,
-                       const std::string& serviceName) {
+bool GFSNodeAdmin::run(const string& directory,
+                       const string& iniFilePath,
+                       const string& serviceName) {
    if (OSUtils::directoryExists(directory)) {
       if (OSUtils::pathExists(iniFilePath)) {
          m_baseDir = directory;
@@ -162,13 +163,13 @@ bool GFSNodeAdmin::run(const std::string& directory,
          const int rc = server.run();
          return (rc == 0);
       } else {
-         Logger::error(std::string("ini file path does not exist: '") +
+         Logger::error(string("ini file path does not exist: '") +
                        iniFilePath +
-                       std::string("'"));
+                       string("'"));
          return false;
       }
    } else {
-      Logger::error(std::string("directory to serve does not exist: ") +
+      Logger::error(string("directory to serve does not exist: ") +
                     directory);
       return false;
    }
@@ -183,7 +184,7 @@ bool GFSNodeAdmin::cpuStat() {
 
 //******************************************************************************
 
-bool GFSNodeAdmin::deviceStat(const std::string& device) {
+bool GFSNodeAdmin::deviceStat(const string& device) {
    //TODO: implement deviceStat
    return false;
 }
@@ -222,7 +223,7 @@ bool GFSNodeAdmin::infoSys(tonnerre::Message& responseMessage) {
 
 //******************************************************************************
 
-bool GFSNodeAdmin::uptimeSys(std::string& uptimeSeconds) {
+bool GFSNodeAdmin::uptimeSys(string& uptimeSeconds) {
    bool success = false;
    long long uptimeSecondsValue = 0L;
    
@@ -241,7 +242,7 @@ bool GFSNodeAdmin::uptimeSys(std::string& uptimeSeconds) {
 
 //******************************************************************************
 
-bool GFSNodeAdmin::deviceList(std::vector<std::string>& listDevices) {
+bool GFSNodeAdmin::deviceList(vector<string>& listDevices) {
    if (m_debugPrint) {
       Logger::debug("deviceList called");
    }
@@ -255,14 +256,14 @@ bool GFSNodeAdmin::deviceList(std::vector<std::string>& listDevices) {
 
 //******************************************************************************
 
-bool GFSNodeAdmin::lastFileUpdate(std::string& fileUpdateDate) {
+bool GFSNodeAdmin::lastFileUpdate(string& fileUpdateDate) {
    //TODO: implement lastFileUpdate
    return false;
 }
 
 //******************************************************************************
 
-bool GFSNodeAdmin::lastFileRetrieve(std::string& fileRetrieveDate) {
+bool GFSNodeAdmin::lastFileRetrieve(string& fileRetrieveDate) {
    //TODO: implement lastFileRetrieve
    return false;
 }

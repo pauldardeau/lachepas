@@ -3,8 +3,10 @@
 
 #include "FilePermissions.h"
 
-static const std::string DEFAULT_PERMISSIONS  = "rw-";
-static const std::string NO_PERMISSIONS       = "---";
+using namespace std;
+
+static const string DEFAULT_PERMISSIONS  = "rw-";
+static const string NO_PERMISSIONS       = "---";
 
 using namespace lachepas;
 
@@ -16,7 +18,7 @@ FilePermissions::FilePermissions() :
 
 //******************************************************************************
 
-FilePermissions::FilePermissions(const std::string& permissions) :
+FilePermissions::FilePermissions(const string& permissions) :
    m_permissions(permissions) {
 }
 
@@ -45,13 +47,13 @@ FilePermissions& FilePermissions::operator=(const FilePermissions& copy) {
 
 //******************************************************************************
 
-const std::string& FilePermissions::getPermissionsString() const {
+const string& FilePermissions::getPermissionsString() const {
    return m_permissions;
 }
 
 //******************************************************************************
 
-void FilePermissions::setPermissionString(const std::string& permissions) {
+void FilePermissions::setPermissionString(const string& permissions) {
    m_permissions = permissions;
 }
 

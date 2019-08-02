@@ -8,11 +8,13 @@
 #include "StringTokenizer.h"
 #include "StrUtils.h"
 
-static const std::string SEC_EXCLUSIONS              = "Exclusions:";
-static const std::string KEY_DIR_EXCLUSION_NAMES     = "dir_exclusion_names";
-static const std::string KEY_DIR_EXCLUSION_PREFIXES  = "dir_exclusion_prefixes";
-static const std::string KEY_FILE_EXCLUSION_NAMES    = "file_exclusion_names";
-static const std::string KEY_FILE_EXCLUSION_SUFFIXES = "file_exclusion_suffixes";
+using namespace std;
+
+static const string SEC_EXCLUSIONS              = "Exclusions:";
+static const string KEY_DIR_EXCLUSION_NAMES     = "dir_exclusion_names";
+static const string KEY_DIR_EXCLUSION_PREFIXES  = "dir_exclusion_prefixes";
+static const string KEY_FILE_EXCLUSION_NAMES    = "file_exclusion_names";
+static const string KEY_FILE_EXCLUSION_SUFFIXES = "file_exclusion_suffixes";
 
 using namespace lachepas;
 using namespace chaudiere;
@@ -62,10 +64,10 @@ bool GFSExclusions::haveExclusions() const {
 
 //******************************************************************************
 
-bool GFSExclusions::retrieveExclusions(const std::string& dirName,
+bool GFSExclusions::retrieveExclusions(const string& dirName,
                                        const SectionedConfigDataSource& dataSource) {
 
-   std::string dirExclusionKey = SEC_EXCLUSIONS;
+   string dirExclusionKey = SEC_EXCLUSIONS;
    dirExclusionKey += dirName;
    m_exclusionsPopulated = false;
    
@@ -97,46 +99,46 @@ bool GFSExclusions::retrieveExclusions(const std::string& dirName,
 
 //******************************************************************************
 
-const std::vector<std::string>& GFSExclusions::getDirExclusionNames() const {
+const vector<string>& GFSExclusions::getDirExclusionNames() const {
    return m_dirExclusionNames;
 }
 
 //******************************************************************************
 
-const std::vector<std::string>& GFSExclusions::getDirExclusionPrefixes() const {
+const vector<string>& GFSExclusions::getDirExclusionPrefixes() const {
    return m_dirExclusionPrefixes;
 }
 
 //******************************************************************************
 
-const std::vector<std::string>& GFSExclusions::getFileExclusionNames() const {
+const vector<string>& GFSExclusions::getFileExclusionNames() const {
    return m_fileExclusionNames;
 }
 
 //******************************************************************************
 
-const std::vector<std::string>& GFSExclusions::getFileExclusionSuffixes() const {
+const vector<string>& GFSExclusions::getFileExclusionSuffixes() const {
    return m_fileExclusionSuffixes;
 }
 
 //******************************************************************************
 
 bool GFSExclusions::parseExclusionList(const KeyValuePairs& kvpExclusions,
-                                       const std::string& key,
-                                       std::vector<std::string>& listValues) {
+                                       const string& key,
+                                       vector<string>& listValues) {
    bool foundValues = false;
    
    if (kvpExclusions.hasKey(key)) {
-      const std::string& listExclusions =
+      const string& listExclusions =
          kvpExclusions.getValue(key);
       if (!listExclusions.empty()) {
          StringTokenizer st(listExclusions, ",");
          const int numTokens = st.countTokens();
          if (numTokens > 0) {
             for (int i = 0; i < numTokens; ++i) {
-               const std::string& exclusion = st.nextToken();
-               Logger::debug(std::string("adding exclusion: '") +
-                             exclusion + std::string("'"));
+               const string& exclusion = st.nextToken();
+               Logger::debug(string("adding exclusion: '") +
+                             exclusion + string("'"));
                listValues.push_back(exclusion);
             }
             foundValues = true;
@@ -149,11 +151,11 @@ bool GFSExclusions::parseExclusionList(const KeyValuePairs& kvpExclusions,
 
 //******************************************************************************
 
-bool GFSExclusions::excludeDirectory(const std::string& dirName) const {
+bool GFSExclusions::excludeDirectory(const string& dirName) const {
    bool excludeDir = false;
    
    if (!m_dirExclusionNames.empty()) {
-      if (std::find(m_dirExclusionNames.begin(),
+      if (find(m_dirExclusionNames.begin(),
                     m_dirExclusionNames.end(),
                     dirName) !=
           m_dirExclusionNames.end()) {
@@ -167,7 +169,7 @@ bool GFSExclusions::excludeDirectory(const std::string& dirName) const {
          const auto itEnd = m_dirExclusionPrefixes.cend();
       
          for (; it != itEnd; ++it) {
-            const std::string& dirExclusionPrefix = *it;
+            const string& dirExclusionPrefix = *it;
             if (StrUtils::startsWith(dirName, dirExclusionPrefix)) {
                excludeDir = true;
                break;
@@ -181,11 +183,11 @@ bool GFSExclusions::excludeDirectory(const std::string& dirName) const {
 
 //******************************************************************************
 
-bool GFSExclusions::excludeFile(const std::string& fileName) const {
+bool GFSExclusions::excludeFile(const string& fileName) const {
    bool excludeFile = false;
    
    if (!m_fileExclusionNames.empty()) {
-      if (std::find(m_fileExclusionNames.begin(),
+      if (find(m_fileExclusionNames.begin(),
                     m_fileExclusionNames.end(),
                     fileName) !=
           m_fileExclusionNames.end()) {
@@ -199,7 +201,7 @@ bool GFSExclusions::excludeFile(const std::string& fileName) const {
          const auto itEnd = m_fileExclusionSuffixes.cend();
       
          for (; it != itEnd; ++it) {
-            const std::string& fileExclusionSuffix = *it;
+            const string& fileExclusionSuffix = *it;
             if (StrUtils::endsWith(fileName, fileExclusionSuffix)) {
                excludeFile = true;
                break;

@@ -11,8 +11,10 @@
 #include "Logger.h"
 #include "StrUtils.h"
 
-static const std::string DELIMITER    = "_";
-static const std::string EMPTY_STRING = "";
+using namespace std;
+
+static const string DELIMITER    = "_";
+static const string EMPTY_STRING = "";
 
 
 using namespace lachepas;
@@ -20,13 +22,13 @@ using namespace chaudiere;
 
 //******************************************************************************
 
-std::string GFS::uniqueIdentifierForString(const std::string& s) {
+string GFS::uniqueIdentifierForString(const string& s) {
    return GFS::uniqueIdentifierForBuffer(s.data(), s.size());
 }
 
 //******************************************************************************
 
-std::string GFS::uniqueIdentifierForBuffer(const char* s, int length) {
+string GFS::uniqueIdentifierForBuffer(const char* s, int length) {
    if ((nullptr == s) || (length == 0)) {
       return EMPTY_STRING;
    }
@@ -36,8 +38,8 @@ std::string GFS::uniqueIdentifierForBuffer(const char* s, int length) {
 
 //******************************************************************************
 
-bool GFS::uniqueIdentifierForFile(const std::string& filePath,
-                                  std::string& uniqueIdentifier) {
+bool GFS::uniqueIdentifierForFile(const string& filePath,
+                                  string& uniqueIdentifier) {
 
    FILE* f = ::fopen(filePath.c_str(), "r");
    if (f != nullptr) {
@@ -104,8 +106,8 @@ bool GFS::uniqueIdentifierForFile(const std::string& filePath,
 
 //******************************************************************************
 
-bool GFS::readFile(const std::string& filePath,
-                   std::string& fileContents) {
+bool GFS::readFile(const string& filePath,
+                   string& fileContents) {
 
    FILE* f = ::fopen(filePath.c_str(), "rb");
    if (f == nullptr) {

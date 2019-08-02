@@ -3,6 +3,7 @@
 
 #include "VaultFileBlock.h"
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
@@ -166,37 +167,37 @@ int VaultFileBlock::getPadCharCount() const {
 
 //******************************************************************************
 
-void VaultFileBlock::setUniqueIdentifier(const std::string& uniqueIdentifier) {
+void VaultFileBlock::setUniqueIdentifier(const string& uniqueIdentifier) {
    m_uniqueIdentifier = uniqueIdentifier;
 }
 
 //******************************************************************************
 
-const std::string& VaultFileBlock::getUniqueIdentifier() const {
+const string& VaultFileBlock::getUniqueIdentifier() const {
    return m_uniqueIdentifier;
 }
 
 //******************************************************************************
 
-void VaultFileBlock::setNodeDirectory(const std::string& nodeDirectory) {
+void VaultFileBlock::setNodeDirectory(const string& nodeDirectory) {
    m_nodeDirectory = nodeDirectory;
 }
 
 //******************************************************************************
 
-const std::string& VaultFileBlock::getNodeDirectory() const {
+const string& VaultFileBlock::getNodeDirectory() const {
    return m_nodeDirectory;
 }
 
 //******************************************************************************
 
-void VaultFileBlock::setNodeFile(const std::string& nodeFile) {
+void VaultFileBlock::setNodeFile(const string& nodeFile) {
    m_nodeFile = nodeFile;
 }
 
 //******************************************************************************
 
-const std::string& VaultFileBlock::getNodeFile() const {
+const string& VaultFileBlock::getNodeFile() const {
    return m_nodeFile;
 }
 

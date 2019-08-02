@@ -4,13 +4,14 @@
 #include "GFSMessageHandler.h"
 #include "GFSMessage.h"
 
+using namespace std;
 using namespace lachepas;
 using namespace tonnerre;
 
 //******************************************************************************
 
 void GFSMessageHandler::encodeError(Message& responseMessage,
-                                    const std::string& error) {
+                                    const string& error) {
    encodeBool(responseMessage, false);
    GFSMessage::setError(responseMessage, error);
 }

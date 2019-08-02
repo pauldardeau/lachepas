@@ -14,14 +14,15 @@
 #include "DBString.h"
 #include "SQLiteDatabase.h"
 
+using namespace std;
 using namespace chapeau;
 
-static const std::string MSG_NO_DB_CONNECTION = "no database connection";
+static const string MSG_NO_DB_CONNECTION = "no database connection";
 
 //******************************************************************************
 
 //TODO: this is SQLite specific!!
-static const std::string SQL_QUERY_HAVE_TABLES =
+static const string SQL_QUERY_HAVE_TABLES =
    "SELECT name "
    "FROM sqlite_master "
    "WHERE type='table' "
@@ -42,7 +43,7 @@ static const std::string SQL_QUERY_HAVE_TABLES =
 // encrypt - 0/1 (boolean) to indicate whether to encrypt the data (or not)
 // copy_count - integer value to specify how many copies (replicas) you want
 //              stored. normally, this is 1.
-static const std::string SQL_CREATE_LOCAL_DIRECTORY =
+static const string SQL_CREATE_LOCAL_DIRECTORY =
    "CREATE TABLE local_directory ("
       "local_directory_id INTEGER PRIMARY KEY, "
       "dir_path TEXT NOT NULL, "
@@ -65,7 +66,7 @@ static const std::string SQL_CREATE_LOCAL_DIRECTORY =
 // modify_time - unix timestamp for the time the file was modified (read from the local filesystem)
 // scan_time - unix timestamp for the time when the file was last scanned (this
 //             helps identify whether the file was changed since it was last scanned)
-static const std::string SQL_CREATE_LOCAL_FILE =
+static const string SQL_CREATE_LOCAL_FILE =
    "CREATE TABLE local_file ("
       "local_file_id INTEGER PRIMARY KEY, "
       "local_directory_id INTEGER REFERENCES local_directory(local_directory_id), "
@@ -81,7 +82,7 @@ static const std::string SQL_CREATE_LOCAL_FILE =
 // active - 0/1 (boolean) to indicate whether the storage node should be used (or not). normally this is true (1)
 // ping_time - unix timestamp to indicate the last time we communicated with the storage node (not currently populated)
 // copy_time - unix timestamp to indicate the last time we copied a file block to the storage node (not currently populated)
-static const std::string SQL_CREATE_STORAGE_NODE =
+static const string SQL_CREATE_STORAGE_NODE =
    "CREATE TABLE storage_node ("
       "storage_node_id INTEGER PRIMARY KEY, "
       "node_name TEXT NOT NULL, "
@@ -96,7 +97,7 @@ static const std::string SQL_CREATE_STORAGE_NODE =
 // local_directory_id - the row identifier for the local directory in the local_directory table (use for joins with local_directory table)
 // compress - 0/1 (boolean) to indicate whether the vault files are compressed (currently not used)
 // encrypt - 0/1 (boolean) to indicate whether the vault files are encrypted
-static const std::string SQL_CREATE_VAULT =
+static const string SQL_CREATE_VAULT =
    "CREATE TABLE vault ("
       "vault_id INTEGER PRIMARY KEY, "
       "storage_node_id INTEGER REFERENCES storage_node(storage_node_id), "
@@ -116,7 +117,7 @@ static const std::string SQL_CREATE_VAULT =
 // user_permissions - unix permissions for user (rwx)
 // group_permissions - unix permissions for group (rwx)
 // other_permissions - unix permissions for others (rwx)
-static const std::string SQL_CREATE_VAULT_FILE =
+static const string SQL_CREATE_VAULT_FILE =
    "CREATE TABLE vault_file ("
       "vault_file_id INTEGER PRIMARY KEY, "
       "local_file_id INTEGER REFERENCES local_file(local_file_id), "
@@ -143,7 +144,7 @@ static const std::string SQL_CREATE_VAULT_FILE =
 // unique_identifier - the unique identifier of the file block (*** REALLY IMPORTANT ***)
 // node_directory - the name of the directory where the block is stored on the storage node
 // node_file - the name of the file where the block is stored on the storage node
-static const std::string SQL_CREATE_FILE_BLOCK =
+static const string SQL_CREATE_FILE_BLOCK =
    "CREATE TABLE vault_file_block ("
       "vault_file_block_id INTEGER PRIMARY KEY, "
       "vault_file_id INTEGER REFERENCES vault_file(vault_file_id), "
@@ -161,33 +162,33 @@ static const std::string SQL_CREATE_FILE_BLOCK =
 
 //******************************************************************************
 
-static const std::string SQL_INSERT_LOCAL_DIRECTORY =
+static const string SQL_INSERT_LOCAL_DIRECTORY =
    "INSERT INTO local_directory "
    "(dir_path,active,recurse,compress,encrypt,copy_count) "
    "VALUES (?,?,?,?,?,?)";
 
-static const std::string SQL_INSERT_LOCAL_FILE =
+static const string SQL_INSERT_LOCAL_FILE =
    "INSERT INTO local_file "
    "(local_directory_id,file_path,create_time,modify_time,scan_time) "
    "VALUES (?,?,?,?,?)";
 
-static const std::string SQL_INSERT_STORAGE_NODE =
+static const string SQL_INSERT_STORAGE_NODE =
    "INSERT INTO storage_node "
    "(node_name,active) "
    "VALUES (?,?);";
 
-static const std::string SQL_INSERT_VAULT =
+static const string SQL_INSERT_VAULT =
    "INSERT INTO vault "
    "(storage_node_id,local_directory_id,compress,encrypt) "
    "VALUES (?,?,?,?)";
 
-static const std::string SQL_INSERT_VAULT_FILE =
+static const string SQL_INSERT_VAULT_FILE =
    "INSERT INTO vault_file "
    "(local_file_id,vault_id,create_time,modify_time,origin_filesize,block_count,"
       "user_permissions, group_permissions, other_permissions) "
    "VALUES (?,?,?,?,?,?,?,?,?)";
 
-static const std::string SQL_INSERT_FILE_BLOCK =
+static const string SQL_INSERT_FILE_BLOCK =
    "INSERT INTO vault_file_block "
    "(vault_file_id,create_time,modify_time,stored_time,origin_filesize,stored_filesize,"
       "block_sequence_number,padchar_count,unique_identifier,node_directory,node_file) "
@@ -195,51 +196,51 @@ static const std::string SQL_INSERT_FILE_BLOCK =
 
 //******************************************************************************
 
-static const std::string SQL_SELECT_ACTIVE_LOCAL_DIRECTORY =
+static const string SQL_SELECT_ACTIVE_LOCAL_DIRECTORY =
    "SELECT "
       "local_directory_id, dir_path, active, recurse, compress, encrypt, copy_count "
    "FROM local_directory "
    "WHERE active = 1";
 
-static const std::string SQL_SELECT_INACTIVE_LOCAL_DIRECTORY =
+static const string SQL_SELECT_INACTIVE_LOCAL_DIRECTORY =
    "SELECT "
       "local_directory_id, dir_path, active, recurse, compress, encrypt, copy_count "
    "FROM local_directory "
    "WHERE active = 0";
 
-static const std::string SQL_SELECT_LOCAL_FILE =
+static const string SQL_SELECT_LOCAL_FILE =
    "SELECT "
       "local_file_id, create_time, modify_time, scan_time "
    "FROM local_file "
    "WHERE local_directory_id = ? "
    "AND file_path = ?";
 
-static const std::string SQL_SELECT_LOCAL_FILE_LIST =
+static const string SQL_SELECT_LOCAL_FILE_LIST =
    "SELECT "
       "local_file_id, file_path, create_time, modify_time, scan_time "
    "FROM local_file "
    "WHERE local_directory_id = ?";
 
-static const std::string SQL_SELECT_ACTIVE_STORAGE_NODE =
+static const string SQL_SELECT_ACTIVE_STORAGE_NODE =
    "SELECT "
       "storage_node_id, node_name, ping_time, copy_time "
    "FROM storage_node "
    "WHERE active = 1";
 
-static const std::string SQL_SELECT_INACTIVE_STORAGE_NODE =
+static const string SQL_SELECT_INACTIVE_STORAGE_NODE =
    "SELECT "
       "storage_node_id, node_name, ping_time, copy_time "
    "FROM storage_node "
    "WHERE active = 0";
 
-static const std::string SQL_SELECT_NODE_VAULT =
+static const string SQL_SELECT_NODE_VAULT =
    "SELECT "
       "vault_id, compress, encrypt "
    "FROM vault "
    "WHERE storage_node_id = ? "
    "AND local_directory_id = ?";
 
-static const std::string SQL_SELECT_VAULT_FILE =
+static const string SQL_SELECT_VAULT_FILE =
    "SELECT "
       "vault_file_id, create_time, "
       "modify_time, origin_filesize, block_count, "
@@ -248,7 +249,7 @@ static const std::string SQL_SELECT_VAULT_FILE =
    "WHERE local_file_id = ? "
    "AND vault_id = ?";
 
-static const std::string SQL_SELECT_FILE_BLOCK =
+static const string SQL_SELECT_FILE_BLOCK =
    "SELECT "
       "vault_file_block_id, create_time, modify_time, stored_time, "
       "origin_filesize, stored_filesize, block_sequence_number, "
@@ -259,39 +260,39 @@ static const std::string SQL_SELECT_FILE_BLOCK =
 
 //******************************************************************************
 
-static const std::string SQL_DELETE_LOCAL_DIRECTORY =
+static const string SQL_DELETE_LOCAL_DIRECTORY =
    "DELETE "
    "FROM local_directory "
    "WHERE local_directory_id = ?";
 
-static const std::string SQL_DELETE_LOCAL_FILE =
+static const string SQL_DELETE_LOCAL_FILE =
    "DELETE "
    "FROM local_file "
    "WHERE local_file_id = ?";
 
-static const std::string SQL_DELETE_ACTIVE_STORAGE_NODE =
+static const string SQL_DELETE_ACTIVE_STORAGE_NODE =
    "UPDATE storage_node "
    "SET active = 0 "
    "WHERE storage_node_id = ?";
 
-static const std::string SQL_DELETE_NODE_VAULT =
+static const string SQL_DELETE_NODE_VAULT =
    "DELETE "
    "FROM vault "
    "WHERE vault_id = ?";
 
-static const std::string SQL_DELETE_VAULT_FILE =
+static const string SQL_DELETE_VAULT_FILE =
    "DELETE "
    "FROM vault_file "
    "WHERE vault_file_id = ?";
 
-static const std::string SQL_DELETE_FILE_BLOCK =
+static const string SQL_DELETE_FILE_BLOCK =
    "DELETE "
    "FROM vault_file_block "
    "WHERE vault_file_block_id = ?";
 
 //******************************************************************************
 
-static const std::string SQL_UPDATE_LOCAL_DIRECTORY =
+static const string SQL_UPDATE_LOCAL_DIRECTORY =
    "UDPATE local_directory "
    "SET dir_path = ?, "
       "active = ?, "
@@ -301,7 +302,7 @@ static const std::string SQL_UPDATE_LOCAL_DIRECTORY =
       "copy_count = ? "
    "WHERE local_directory_id = ?";
 
-static const std::string SQL_UPDATE_LOCAL_FILE =
+static const string SQL_UPDATE_LOCAL_FILE =
    "UPDATE local_file "
    "SET local_directory_id = ?, "
       "file_path = ?, "
@@ -310,7 +311,7 @@ static const std::string SQL_UPDATE_LOCAL_FILE =
       "scan_time = ? "
    "WHERE local_file_id = ?";
 
-static const std::string SQL_UPDATE_ACTIVE_STORAGE_NODE =
+static const string SQL_UPDATE_ACTIVE_STORAGE_NODE =
    "UPDATE storage_node "
    "SET node_name = ?, "
       "active = ?, "
@@ -318,7 +319,7 @@ static const std::string SQL_UPDATE_ACTIVE_STORAGE_NODE =
       "copy_time = ? "
    "WHERE storage_node_id = ?";
 
-static const std::string SQL_UPDATE_NODE_VAULT =
+static const string SQL_UPDATE_NODE_VAULT =
    "UPDATE vault "
    "SET storage_node_id = ?, "
       "local_directory_id = ?, "
@@ -326,7 +327,7 @@ static const std::string SQL_UPDATE_NODE_VAULT =
       "encrypt = ? "
    "WHERE vault_id = ?";
 
-static const std::string SQL_UPDATE_VAULT_FILE =
+static const string SQL_UPDATE_VAULT_FILE =
    "UPDATE vault_file "
    "SET local_file_id = ?, "
       "vault_id = ?, "
@@ -339,7 +340,7 @@ static const std::string SQL_UPDATE_VAULT_FILE =
       "other_permissions = ? "
    "WHERE vault_file_id = ?";
 
-static const std::string SQL_UPDATE_FILE_BLOCK =
+static const string SQL_UPDATE_FILE_BLOCK =
    "UPDATE vault_file_block "
    "SET vault_file_id = ?, "
       "create_time = ?, "
@@ -362,7 +363,7 @@ using namespace chaudiere;
 
 //******************************************************************************
 
-DataAccess::DataAccess(const std::string& filePath) :
+DataAccess::DataAccess(const string& filePath) :
                        m_dbConnection(nullptr),
                        m_dbFilePath(filePath),
                        m_debugPrint(true) {
@@ -405,7 +406,7 @@ bool DataAccess::open() {
 
 //******************************************************************************
 
-bool DataAccess::createTable(const std::string& sql) {
+bool DataAccess::createTable(const string& sql) {
    if (m_dbConnection != nullptr) {
       return m_dbConnection->executeUpdate(sql);
    } else {
@@ -501,7 +502,7 @@ bool DataAccess::rollback() {
 bool DataAccess::insertStorageNode(StorageNode& storageNode) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& nodeName = storageNode.getNodeName();
+      const string& nodeName = storageNode.getNodeName();
       if (!nodeName.empty()) {
          DBStatementArgs args;
          args.add(new DBString(nodeName));
@@ -527,7 +528,7 @@ bool DataAccess::insertStorageNode(StorageNode& storageNode) {
 bool DataAccess::insertLocalDirectory(LocalDirectory& localDirectory) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& directoryPath = localDirectory.getDirectoryPath();
+      const string& directoryPath = localDirectory.getDirectoryPath();
       if (!directoryPath.empty()) {
          DBStatementArgs args;
          args.add(new DBString(directoryPath));
@@ -557,7 +558,7 @@ bool DataAccess::insertLocalDirectory(LocalDirectory& localDirectory) {
 bool DataAccess::insertLocalFile(LocalFile& localFile) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& filePath = localFile.getFilePath();
+      const string& filePath = localFile.getFilePath();
       if (!filePath.empty()) {
          const int localDirectoryId = localFile.getLocalDirectoryId();
          if (localDirectoryId > -1) {
@@ -663,9 +664,9 @@ bool DataAccess::insertVaultFile(VaultFile& vaultFile) {
 bool DataAccess::insertVaultFileBlock(VaultFileBlock& vaultFileBlock) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& uniqueIdentifier = vaultFileBlock.getUniqueIdentifier();
-      const std::string& nodeDirectory = vaultFileBlock.getNodeDirectory();
-      const std::string& nodeFile = vaultFileBlock.getNodeFile();
+      const string& uniqueIdentifier = vaultFileBlock.getUniqueIdentifier();
+      const string& nodeDirectory = vaultFileBlock.getNodeDirectory();
+      const string& nodeFile = vaultFileBlock.getNodeFile();
          
       if (!uniqueIdentifier.empty()) {
          if (!nodeDirectory.empty()) {
@@ -723,7 +724,7 @@ bool DataAccess::updateStorageNode(StorageNode& storageNode) {
    if (m_dbConnection != nullptr) {
       const int storageNodeId = storageNode.getStorageNodeId();
       if (storageNodeId > -1) {
-         const std::string& nodeName = storageNode.getNodeName();
+         const string& nodeName = storageNode.getNodeName();
          if (!nodeName.empty()) {
             DBStatementArgs args;
             args.add(new DBString(nodeName));
@@ -752,7 +753,7 @@ bool DataAccess::updateStorageNode(StorageNode& storageNode) {
 bool DataAccess::updateLocalDirectory(LocalDirectory& localDirectory) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& directoryPath = localDirectory.getDirectoryPath();
+      const string& directoryPath = localDirectory.getDirectoryPath();
       if (!directoryPath.empty()) {
          const int localDirectoryId = localDirectory.getLocalDirectoryId();
          if (localDirectoryId > -1) {
@@ -791,7 +792,7 @@ bool DataAccess::updateLocalDirectory(LocalDirectory& localDirectory) {
 bool DataAccess::updateLocalFile(LocalFile& localFile) {
    bool dbUpdateSuccess = false;
    if (m_dbConnection != nullptr) {
-      const std::string& filePath = localFile.getFilePath();
+      const string& filePath = localFile.getFilePath();
       if (!filePath.empty()) {
          const int localDirectoryId = localFile.getLocalDirectoryId();
          if (localDirectoryId > -1) {
@@ -876,11 +877,11 @@ bool DataAccess::updateVaultFile(VaultFile& vaultFile) {
             if (vaultId > -1) {
                const int originFileSize = vaultFile.getOriginFileSize();
                const int blockCount = vaultFile.getBlockCount();
-               const std::string& userPermissions =
+               const string& userPermissions =
                   vaultFile.getUserPermissions().getPermissionsString();
-               const std::string& groupPermissions =
+               const string& groupPermissions =
                   vaultFile.getGroupPermissions().getPermissionsString();
-               const std::string& otherPermissions =
+               const string& otherPermissions =
                   vaultFile.getOtherPermissions().getPermissionsString();
 
                DBStatementArgs args;
@@ -920,9 +921,9 @@ bool DataAccess::updateVaultFileBlock(VaultFileBlock& vaultFileBlock) {
    if (m_dbConnection != nullptr) {
       const int vaultFileBlockId = vaultFileBlock.getVaultFileBlockId();
       const int vaultFileId = vaultFileBlock.getVaultFileId();
-      const std::string& uniqueIdentifier = vaultFileBlock.getUniqueIdentifier();
-      const std::string& nodeDirectory = vaultFileBlock.getNodeDirectory();
-      const std::string& nodeFile = vaultFileBlock.getNodeFile();
+      const string& uniqueIdentifier = vaultFileBlock.getUniqueIdentifier();
+      const string& nodeDirectory = vaultFileBlock.getNodeDirectory();
+      const string& nodeFile = vaultFileBlock.getNodeFile();
          
       if (vaultFileBlockId > -1) {
          if (vaultFileId > -1) {
@@ -1121,8 +1122,8 @@ bool DataAccess::deleteVaultFileBlock(VaultFileBlock& vaultFileBlock) {
 
 //******************************************************************************
 
-bool DataAccess::getStorageNodes(const std::string& query,
-                                 std::vector<StorageNode>& listNodes) {
+bool DataAccess::getStorageNodes(const string& query,
+                                 vector<StorageNode>& listNodes) {
    bool dbAccessSuccess = false;
    
    if (m_dbConnection != nullptr) {
@@ -1136,13 +1137,13 @@ bool DataAccess::getStorageNodes(const std::string& query,
          while (rs->next()) {
             //Logger::debug("retrieving storageNodeId");
             const int storageNodeId = rs->intForColumnIndex(0);
-            AutoPointer<std::string*> nodeName(
+            AutoPointer<string*> nodeName(
                rs->stringForColumnIndex(1));
             
             if ((storageNodeId > 0) && (nodeName.haveObject())) {
-               AutoPointer<std::string*> pingTime(
+               AutoPointer<string*> pingTime(
                   rs->stringForColumnIndex(2));
-               AutoPointer<std::string*> copyTime(
+               AutoPointer<string*> copyTime(
                   rs->stringForColumnIndex(3));
 
                StorageNode storageNode;
@@ -1173,20 +1174,20 @@ bool DataAccess::getStorageNodes(const std::string& query,
 
 //******************************************************************************
 
-bool DataAccess::getActiveStorageNodes(std::vector<StorageNode>& listNodes) {
+bool DataAccess::getActiveStorageNodes(vector<StorageNode>& listNodes) {
    return getStorageNodes(SQL_SELECT_ACTIVE_STORAGE_NODE, listNodes);
 }
 
 //******************************************************************************
 
-bool DataAccess::getInactiveStorageNodes(std::vector<StorageNode>& listNodes) {
+bool DataAccess::getInactiveStorageNodes(vector<StorageNode>& listNodes) {
    return getStorageNodes(SQL_SELECT_INACTIVE_STORAGE_NODE, listNodes);
 }
 
 //******************************************************************************
 
-bool DataAccess::getLocalDirectories(const std::string& query,
-                                     std::vector<LocalDirectory>& listDirectories) {
+bool DataAccess::getLocalDirectories(const string& query,
+                                     vector<LocalDirectory>& listDirectories) {
    bool dbAccessSuccess = false;
    if (m_dbConnection != nullptr) {
       //Logger::debug("executing query for getLocalDirectories");
@@ -1199,7 +1200,7 @@ bool DataAccess::getLocalDirectories(const std::string& query,
          while (rs->next()) {
             //Logger::debug("processing row");
             const int localDirectoryId = rs->intForColumnIndex(0);
-            AutoPointer<std::string*> dirPath(
+            AutoPointer<string*> dirPath(
                rs->stringForColumnIndex(1));
             
             if ((localDirectoryId > 0) && (dirPath.haveObject())) {
@@ -1234,20 +1235,20 @@ bool DataAccess::getLocalDirectories(const std::string& query,
 
 //******************************************************************************
 
-bool DataAccess::getActiveLocalDirectories(std::vector<LocalDirectory>& listDirectories) {
+bool DataAccess::getActiveLocalDirectories(vector<LocalDirectory>& listDirectories) {
    return getLocalDirectories(SQL_SELECT_ACTIVE_LOCAL_DIRECTORY, listDirectories);   
 }
 
 //******************************************************************************
 
-bool DataAccess::getInactiveLocalDirectories(std::vector<LocalDirectory>& listDirectories) {
+bool DataAccess::getInactiveLocalDirectories(vector<LocalDirectory>& listDirectories) {
    return getLocalDirectories(SQL_SELECT_INACTIVE_LOCAL_DIRECTORY, listDirectories);   
 }
 
 //******************************************************************************
 
 bool DataAccess::getLocalFile(int localDirectoryId,
-                              const std::string& filePath,
+                              const string& filePath,
                               LocalFile& localFile) {
    //Logger::debug("getLocalFile called");
 
@@ -1272,11 +1273,11 @@ bool DataAccess::getLocalFile(int localDirectoryId,
                   const int localFileId = rs->intForColumnIndex(0);
           
                   if (localFileId > -1) {
-                     AutoPointer<std::string*> createTime(
+                     AutoPointer<string*> createTime(
                         rs->stringForColumnIndex(1));
-                     AutoPointer<std::string*> modifyTime(
+                     AutoPointer<string*> modifyTime(
                         rs->stringForColumnIndex(2));
-                     AutoPointer<std::string*> scanTime(
+                     AutoPointer<string*> scanTime(
                         rs->stringForColumnIndex(3));
 
                      localFile.setLocalDirectoryId(localDirectoryId);
@@ -1317,7 +1318,7 @@ bool DataAccess::getLocalFile(int localDirectoryId,
 //******************************************************************************
 
 bool DataAccess::getLocalFilesForDirectory(int localDirectoryId,
-                                           std::vector<LocalFile>& listFiles) {
+                                           vector<LocalFile>& listFiles) {
    //Logger::debug("getLocalFilesForDirectory called");
    
    bool dbAccessSuccess = false;
@@ -1334,15 +1335,15 @@ bool DataAccess::getLocalFilesForDirectory(int localDirectoryId,
          //Logger::debug("have non-null resultSet");
          while (rs->next()) {
             const int localFileId = rs->intForColumnIndex(0);
-            AutoPointer<std::string*> filePath(
+            AutoPointer<string*> filePath(
                rs->stringForColumnIndex(1));
           
             if ((localFileId > 0) && (filePath.haveObject())) {
-               AutoPointer<std::string*> createTime(
+               AutoPointer<string*> createTime(
                   rs->stringForColumnIndex(2));
-               AutoPointer<std::string*> modifyTime(
+               AutoPointer<string*> modifyTime(
                   rs->stringForColumnIndex(3));
-               AutoPointer<std::string*> scanTime(
+               AutoPointer<string*> scanTime(
                   rs->stringForColumnIndex(4));
 
                LocalFile localFile;
@@ -1461,11 +1462,11 @@ bool DataAccess::getVaultFile(int vaultId, int localFileId, VaultFile& vaultFile
                         rs->dateForColumnIndex(2));
                      const int originFileSize = rs->intForColumnIndex(3);
                      const int blockCount = rs->intForColumnIndex(4);
-                     AutoPointer<std::string*> userPermissions(
+                     AutoPointer<string*> userPermissions(
                         rs->stringForColumnIndex(5));
-                     AutoPointer<std::string*> groupPermissions(
+                     AutoPointer<string*> groupPermissions(
                         rs->stringForColumnIndex(6));
-                     AutoPointer<std::string*> otherPermissions(
+                     AutoPointer<string*> otherPermissions(
                         rs->stringForColumnIndex(7));
 
                      vaultFile.setVaultFileId(vaultFileId);
@@ -1516,7 +1517,7 @@ bool DataAccess::getVaultFile(int vaultId, int localFileId, VaultFile& vaultFile
 //******************************************************************************
 
 bool DataAccess::getBlocksForVaultFile(int vaultFileId,
-                                       std::vector<VaultFileBlock>& listFileBlocks) {
+                                       vector<VaultFileBlock>& listFileBlocks) {
    bool dbAccessSuccess = false;
    if (m_dbConnection != nullptr) {
       if (vaultFileId > -1) {
@@ -1534,21 +1535,21 @@ bool DataAccess::getBlocksForVaultFile(int vaultFileId,
                const int vaultFileBlockId = rs->intForColumnIndex(0);
           
                if (vaultFileBlockId > 0) {
-                  AutoPointer<std::string*> createTime(
+                  AutoPointer<string*> createTime(
                      rs->stringForColumnIndex(1));
-                  AutoPointer<std::string*> modifyTime(
+                  AutoPointer<string*> modifyTime(
                      rs->stringForColumnIndex(2));
-                  AutoPointer<std::string*> storedTime(
+                  AutoPointer<string*> storedTime(
                      rs->stringForColumnIndex(3));
                   const int originFileSize = rs->intForColumnIndex(4);
                   const int storedFileSize = rs->intForColumnIndex(5);
                   const int blockSequenceNumber = rs->intForColumnIndex(6);
                   const int padCharCount = rs->intForColumnIndex(7);
-                  AutoPointer<std::string*> uniqueIdentifier(
+                  AutoPointer<string*> uniqueIdentifier(
                      rs->stringForColumnIndex(8));
-                  AutoPointer<std::string*> nodeDirectory(
+                  AutoPointer<string*> nodeDirectory(
                      rs->stringForColumnIndex(9));
-                  AutoPointer<std::string*> nodeFile(
+                  AutoPointer<string*> nodeFile(
                      rs->stringForColumnIndex(10));
 
                   VaultFileBlock vaultFileBlock;

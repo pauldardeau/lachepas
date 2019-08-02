@@ -3,6 +3,7 @@
 
 #include "StorageNode.h"
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
@@ -84,13 +85,13 @@ const chaudiere::DateTime& StorageNode::getCopyTime() const {
 
 //******************************************************************************
 
-void StorageNode::setNodeName(const std::string& nodeName) {
+void StorageNode::setNodeName(const string& nodeName) {
    m_nodeName = nodeName;
 }
 
 //******************************************************************************
 
-const std::string& StorageNode::getNodeName() const {
+const string& StorageNode::getNodeName() const {
    return m_nodeName;
 }
 

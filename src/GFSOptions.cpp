@@ -3,6 +3,7 @@
 
 #include "GFSOptions.h"
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
@@ -65,97 +66,97 @@ bool GFSOptions::validateOptions() const {
 
 //******************************************************************************
 
-void GFSOptions::setDirectory(const std::string& directory) {
+void GFSOptions::setDirectory(const string& directory) {
    m_directory = directory;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getDirectory() const {
+const string& GFSOptions::getDirectory() const {
    return m_directory;
 }
 
 //******************************************************************************
 
-void GFSOptions::setTargetDirectory(const std::string& targetDirectory) {
+void GFSOptions::setTargetDirectory(const string& targetDirectory) {
    m_targetDirectory = targetDirectory;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getTargetDirectory() const {
+const string& GFSOptions::getTargetDirectory() const {
    return m_targetDirectory;
 }
 
 //******************************************************************************
 
-void GFSOptions::setFile(const std::string& file) {
+void GFSOptions::setFile(const string& file) {
    m_file = file;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getFile() const {
+const string& GFSOptions::getFile() const {
    return m_file;
 }
 
 //******************************************************************************
 
-void GFSOptions::setEncryptionKey(const std::string& encryptionKey) {
+void GFSOptions::setEncryptionKey(const string& encryptionKey) {
    m_encryptionKey = encryptionKey;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getEncryptionKey() const {
+const string& GFSOptions::getEncryptionKey() const {
    return m_encryptionKey;
 }
 
 //******************************************************************************
 
-void GFSOptions::setEncryptionKeyFile(const std::string& encryptionKeyFile) {
+void GFSOptions::setEncryptionKeyFile(const string& encryptionKeyFile) {
    m_encryptionKeyFile = encryptionKeyFile;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getEncryptionKeyFile() const {
+const string& GFSOptions::getEncryptionKeyFile() const {
    return m_encryptionKeyFile;
 }
 
 //******************************************************************************
 
-void GFSOptions::setEncryptionIV(const std::string& encryptionIV) {
+void GFSOptions::setEncryptionIV(const string& encryptionIV) {
    m_encryptionIV = encryptionIV;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getEncryptionIV() const {
+const string& GFSOptions::getEncryptionIV() const {
    return m_encryptionIV;
 }
 
 //******************************************************************************
 
-void GFSOptions::setConfigFile(const std::string& configFile) {
+void GFSOptions::setConfigFile(const string& configFile) {
    m_configFile = configFile;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getConfigFile() const {
+const string& GFSOptions::getConfigFile() const {
    return m_configFile;
 }
 
 //******************************************************************************
 
-void GFSOptions::setNode(const std::string& node) {
+void GFSOptions::setNode(const string& node) {
    m_node = node;
 }
 
 //******************************************************************************
 
-const std::string& GFSOptions::getNode() const {
+const string& GFSOptions::getNode() const {
    return m_node;
 }
 

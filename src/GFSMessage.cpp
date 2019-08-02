@@ -7,47 +7,48 @@
 #include "Message.h"
 #include "StringTokenizer.h"
 
+using namespace std;
 using namespace lachepas;
 
-static const std::string LIST_DELIMITER         = "|";
+static const string LIST_DELIMITER         = "|";
 
-static const std::string KEY_PREFIX             = "gfs_";
+static const string KEY_PREFIX             = "gfs_";
 
-static const std::string KEY_RC                 = KEY_PREFIX + "rc";
-static const std::string KEY_ERROR              = KEY_PREFIX + "error";
+static const string KEY_RC                 = KEY_PREFIX + "rc";
+static const string KEY_ERROR              = KEY_PREFIX + "error";
 
-static const std::string KEY_DEVICE             = KEY_PREFIX + "device";
-static const std::string KEY_DEVICE_LIST        = KEY_PREFIX + "deviceList";
-static const std::string KEY_DIR                = KEY_PREFIX + "dir";
-static const std::string KEY_DIR_LIST           = KEY_PREFIX + "dirList";
-static const std::string KEY_FILE               = KEY_PREFIX + "file";
-static const std::string KEY_FILE_LIST          = KEY_PREFIX + "fileList";
-static const std::string KEY_ORIGIN_FS          = KEY_PREFIX + "origin_fs";
-static const std::string KEY_STORED_FS          = KEY_PREFIX + "stored_fs";
-static const std::string KEY_UNIQUE_IDENTIFIER  = KEY_PREFIX + "unique_id";
+static const string KEY_DEVICE             = KEY_PREFIX + "device";
+static const string KEY_DEVICE_LIST        = KEY_PREFIX + "deviceList";
+static const string KEY_DIR                = KEY_PREFIX + "dir";
+static const string KEY_DIR_LIST           = KEY_PREFIX + "dirList";
+static const string KEY_FILE               = KEY_PREFIX + "file";
+static const string KEY_FILE_LIST          = KEY_PREFIX + "fileList";
+static const string KEY_ORIGIN_FS          = KEY_PREFIX + "origin_fs";
+static const string KEY_STORED_FS          = KEY_PREFIX + "stored_fs";
+static const string KEY_UNIQUE_IDENTIFIER  = KEY_PREFIX + "unique_id";
 
-static const std::string VALUE_TRUE             = "true";
-static const std::string VALUE_FALSE            = "false";
+static const string VALUE_TRUE             = "true";
+static const string VALUE_FALSE            = "false";
 
 //******************************************************************************
 
 void GFSMessage::setKeyValue(tonnerre::Message& message,
-                             const std::string& key,
-                             const std::string& value) {
+                             const string& key,
+                             const string& value) {
    message.setHeader(key, value);
 }
 
 //******************************************************************************
 
 bool GFSMessage::hasKey(const tonnerre::Message& message,
-                        const std::string& key) {
+                        const string& key) {
    return message.hasHeader(key);
 }
 
 //******************************************************************************
 
-const std::string& GFSMessage::getKeyValue(const tonnerre::Message& message,
-                                           const std::string& key) {
+const string& GFSMessage::getKeyValue(const tonnerre::Message& message,
+                                      const string& key) {
    return message.getHeader(key);
 }
 
@@ -66,7 +67,7 @@ void GFSMessage::setRC(tonnerre::Message& message, bool rc) {
 bool GFSMessage::getRC(const tonnerre::Message& message) {
    bool rc = false;
    if (GFSMessage::hasKey(message, KEY_RC)) {
-      const std::string& rcValue = GFSMessage::getKeyValue(message, KEY_RC);
+      const string& rcValue = GFSMessage::getKeyValue(message, KEY_RC);
       if (rcValue == VALUE_TRUE) {
          rc = true;
       }
@@ -78,7 +79,7 @@ bool GFSMessage::getRC(const tonnerre::Message& message) {
 //******************************************************************************
 
 void GFSMessage::setError(tonnerre::Message& message,
-                          const std::string& error) {
+                          const string& error) {
    GFSMessage::setKeyValue(message, KEY_ERROR, error);
 }
 
@@ -90,14 +91,14 @@ bool GFSMessage::hasError(const tonnerre::Message& message) {
 
 //******************************************************************************
 
-const std::string& GFSMessage::getError(const tonnerre::Message& message) {
+const string& GFSMessage::getError(const tonnerre::Message& message) {
    return GFSMessage::getKeyValue(message, KEY_ERROR);
 }
 
 //******************************************************************************
 
 void GFSMessage::setDirectory(tonnerre::Message& message,
-                              const std::string& directory) {
+                              const string& directory) {
    GFSMessage::setKeyValue(message, KEY_DIR, directory);
 }
 
@@ -109,14 +110,14 @@ bool GFSMessage::hasDirectory(const tonnerre::Message& message) {
 
 //******************************************************************************
 
-const std::string& GFSMessage::getDirectory(const tonnerre::Message& message) {
+const string& GFSMessage::getDirectory(const tonnerre::Message& message) {
    return GFSMessage::getKeyValue(message, KEY_DIR);
 }
 
 //******************************************************************************
       
 void GFSMessage::setFile(tonnerre::Message& message,
-                         const std::string& fileName) {
+                         const string& fileName) {
    GFSMessage::setKeyValue(message, KEY_FILE, fileName);
 }
 
@@ -128,14 +129,14 @@ bool GFSMessage::hasFile(const tonnerre::Message& message) {
 
 //******************************************************************************
 
-const std::string& GFSMessage::getFile(const tonnerre::Message& message) {
+const string& GFSMessage::getFile(const tonnerre::Message& message) {
    return GFSMessage::getKeyValue(message, KEY_FILE);
 }
 
 //******************************************************************************
 
 void GFSMessage::setUniqueIdentifier(tonnerre::Message& message,
-                                     const std::string& uniqueIdentifier) {
+                                     const string& uniqueIdentifier) {
    GFSMessage::setKeyValue(message, KEY_UNIQUE_IDENTIFIER, uniqueIdentifier);
 }
 
@@ -147,7 +148,7 @@ bool GFSMessage::hasUniqueIdentifier(const tonnerre::Message& message) {
 
 //******************************************************************************
 
-const std::string& GFSMessage::getUniqueIdentifier(const tonnerre::Message& message) {
+const string& GFSMessage::getUniqueIdentifier(const tonnerre::Message& message) {
    return GFSMessage::getKeyValue(message, KEY_UNIQUE_IDENTIFIER);
 }
 
@@ -170,7 +171,7 @@ bool GFSMessage::hasOriginFileSize(tonnerre::Message& message) {
 
 unsigned long GFSMessage::getOriginFileSize(tonnerre::Message& message) {
    unsigned long fileSize = 0L;
-   const std::string& fileSizeString = GFSMessage::getKeyValue(message, KEY_ORIGIN_FS);
+   const string& fileSizeString = GFSMessage::getKeyValue(message, KEY_ORIGIN_FS);
    if (!fileSizeString.empty()) {
       fileSize = ::strtoul(fileSizeString.c_str(), nullptr, 0);
    }
@@ -197,7 +198,7 @@ bool GFSMessage::hasStoredFileSize(tonnerre::Message& message) {
 
 unsigned long GFSMessage::getStoredFileSize(tonnerre::Message& message) {
    unsigned long fileSize = 0L;
-   const std::string& fileSizeString = GFSMessage::getKeyValue(message, KEY_STORED_FS);
+   const string& fileSizeString = GFSMessage::getKeyValue(message, KEY_STORED_FS);
    if (!fileSizeString.empty()) {
       fileSize = strtoul(fileSizeString.c_str(), nullptr, 0);
    }
@@ -208,10 +209,10 @@ unsigned long GFSMessage::getStoredFileSize(tonnerre::Message& message) {
 //******************************************************************************
 
 void GFSMessage::setFileList(tonnerre::Message& message,
-                             const std::vector<std::string>& listFiles) {
+                             const vector<string>& listFiles) {
    if (!listFiles.empty()) {
       const int numFileNames = listFiles.size();
-      std::string encodedList;
+      string encodedList;
       
       for (int i = 0; i < numFileNames; ++i) {
          if (i > 0) {
@@ -234,10 +235,10 @@ bool GFSMessage::hasFileList(tonnerre::Message& message) {
 //******************************************************************************
 
 bool GFSMessage::getFileList(tonnerre::Message& message,
-                             std::vector<std::string>& listFiles) {
+                             vector<string>& listFiles) {
    bool success = false;
    if (hasFileList(message)) {
-      const std::string& fileList = GFSMessage::getKeyValue(message, KEY_FILE_LIST);
+      const string& fileList = GFSMessage::getKeyValue(message, KEY_FILE_LIST);
       if (!fileList.empty()) {
          chaudiere::StringTokenizer st(fileList, LIST_DELIMITER);
          
@@ -255,10 +256,10 @@ bool GFSMessage::getFileList(tonnerre::Message& message,
 //******************************************************************************
 
 void GFSMessage::setDirList(tonnerre::Message& message,
-                            const std::vector<std::string>& listDirectories) {
+                            const vector<string>& listDirectories) {
    if (!listDirectories.empty()) {
       const int numEntries = listDirectories.size();
-      std::string encodedList;
+      string encodedList;
       
       for (int i = 0; i < numEntries; ++i) {
          if (i > 0) {
@@ -281,10 +282,10 @@ bool GFSMessage::hasDirList(tonnerre::Message& message) {
 //******************************************************************************
 
 bool GFSMessage::getDirList(tonnerre::Message& message,
-                            std::vector<std::string>& listDirectories) {
+                            vector<string>& listDirectories) {
    bool success = false;
    if (hasDirList(message)) {
-      const std::string& list = GFSMessage::getKeyValue(message, KEY_DIR_LIST);
+      const string& list = GFSMessage::getKeyValue(message, KEY_DIR_LIST);
       if (!list.empty()) {
          chaudiere::StringTokenizer st(list, LIST_DELIMITER);
          
@@ -302,10 +303,10 @@ bool GFSMessage::getDirList(tonnerre::Message& message,
 //******************************************************************************
 
 void GFSMessage::setDeviceList(tonnerre::Message& message,
-                               const std::vector<std::string>& listDevices) {
+                               const vector<string>& listDevices) {
    if (!listDevices.empty()) {
       const int numEntries = listDevices.size();
-      std::string encodedList;
+      string encodedList;
       
       for (int i = 0; i < numEntries; ++i) {
          if (i > 0) {
@@ -328,10 +329,10 @@ bool GFSMessage::hasDeviceList(tonnerre::Message& message) {
 //******************************************************************************
 
 bool GFSMessage::getDeviceList(tonnerre::Message& message,
-                               std::vector<std::string>& listDevices) {
+                               vector<string>& listDevices) {
    bool success = false;
    if (hasDeviceList(message)) {
-      const std::string& list = GFSMessage::getKeyValue(message, KEY_DEVICE_LIST);
+      const string& list = GFSMessage::getKeyValue(message, KEY_DEVICE_LIST);
       if (!list.empty()) {
          chaudiere::StringTokenizer st(list, LIST_DELIMITER);
          

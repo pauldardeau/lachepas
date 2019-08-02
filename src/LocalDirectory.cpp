@@ -3,6 +3,7 @@
 
 #include "LocalDirectory.h"
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
@@ -48,13 +49,13 @@ LocalDirectory& LocalDirectory::operator=(const LocalDirectory& copy) {
 
 //******************************************************************************
 
-void LocalDirectory::setDirectoryPath(const std::string& directoryPath) {
+void LocalDirectory::setDirectoryPath(const string& directoryPath) {
    m_directoryPath = directoryPath;
 }
 
 //******************************************************************************
 
-const std::string& LocalDirectory::getDirectoryPath() const {
+const string& LocalDirectory::getDirectoryPath() const {
    return m_directoryPath;
 }
 

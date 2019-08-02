@@ -23,11 +23,12 @@ static const char ATTR_REF_COUNT[] = "user.refcount";
 static const char ATTR_REF_COUNT[] = "refcount";
 #endif
 
+using namespace std;
 using namespace lachepas;
 
 //******************************************************************************
 
-long FileReferenceCount::referenceCountForFile(const std::string& filePath) {
+long FileReferenceCount::referenceCountForFile(const string& filePath) {
    char refcount[12];
    memset(refcount, 0, sizeof(refcount));
    const ssize_t numBytesRead =
@@ -83,7 +84,7 @@ long FileReferenceCount::referenceCountForFile(const std::string& filePath) {
 
 //******************************************************************************
 
-bool FileReferenceCount::storeInitialReferenceCount(const std::string& filePath) {
+bool FileReferenceCount::storeInitialReferenceCount(const string& filePath) {
    bool storeSuccess = false;
    char refcount[12];
    memset(refcount, 0, sizeof(refcount));
@@ -137,7 +138,7 @@ bool FileReferenceCount::storeInitialReferenceCount(const std::string& filePath)
 
 //******************************************************************************
 
-bool FileReferenceCount::storeUpdatedReferenceCount(const std::string& filePath,
+bool FileReferenceCount::storeUpdatedReferenceCount(const string& filePath,
                                                     long refCountValue) {
    if (refCountValue < 1L) {
       return false;

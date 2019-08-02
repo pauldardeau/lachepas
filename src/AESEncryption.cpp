@@ -6,7 +6,9 @@
 #include "AESEncryption.h"
 #include "Data.h"
 
-static const std::string EMPTY = "";
+using namespace std;
+
+static const string EMPTY = "";
 
 using namespace lachepas;
 
@@ -15,7 +17,7 @@ using namespace lachepas;
 bool AESEncryption::decrypt(const Data& key,
                             const Data& iv,
                             const Data& cipherText,
-                            std::string& plainText) {
+                            string& plainText) {
    EVP_CIPHER_CTX ctx;
    int rc;
    bool success = false;
@@ -27,8 +29,8 @@ bool AESEncryption::decrypt(const Data& key,
    rc = ::EVP_DecryptInit(&ctx, EVP_aes_256_cbc(), key.cdata(), iv.cdata());
    
    if (1 == rc) {
-      const std::size_t cipherLen = cipherText.size();
-      std::size_t remainingBytes = cipherLen;
+      const size_t cipherLen = cipherText.size();
+      size_t remainingBytes = cipherLen;
       
       char *decryptedData = new char[cipherText.size()+1];
       ::memset(decryptedData, 0, cipherText.size()+1);
@@ -61,10 +63,10 @@ bool AESEncryption::decrypt(const Data& key,
 
 //*****************************************************************************
 
-std::string AESEncryption::decrypt(const Data& key,
+string AESEncryption::decrypt(const Data& key,
                                    const Data& iv,
                                    const Data& cipherText) {
-   std::string plainText;
+   string plainText;
    if (decrypt(key, iv, cipherText, plainText)) {
       return plainText;
    } else {
@@ -85,7 +87,7 @@ Data AESEncryption::encrypt(const Data& key,
 
 unsigned char* AESEncryption::encrypt(const Data& key,
                                       const Data& iv,
-                                      const std::string& plainText) {
+                                      const string& plainText) {
    EVP_CIPHER_CTX ctx;
    int rc;
    bool success = false;
@@ -205,7 +207,7 @@ unsigned char* AESEncryption::encrypt(const Data& key,
 /*
 Data AESEncryption::encrypt(const Data& key,
                             const Data& iv,
-                            const std::string& plainText) {
+                            const string& plainText) {
    Data cipherText;
    if (encrypt(key, iv, plainText, cipherText)) {
       return cipherText;
