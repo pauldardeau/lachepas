@@ -4,15 +4,17 @@
 CC = clang
 CXX = clang++
 CC_OPTS = -c -Wall -O2
-CXX_OPTS = -c -Wall -O2 -std=c++11 -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src
+CXX_OPTS = -c -Wall -O2 -std=c++11 -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
 ARCHIVE_CMD = ar
 ARCHIVE_OPTS = rs
 
 LIB_NAME = liblachepas.a
 
-OBJS = aes256.o \
-AESEncryption.o \
-base64.o \
+AES_OBJS = ./ThirdParty/aes256/aes256.o
+
+BASE64_OBJS = ./ThirdParty/base64/base64.o
+
+OBJS = AESEncryption.o \
 Data.o \
 DataAccess.o \
 Encryption.o \
@@ -41,8 +43,14 @@ clean :
 	rm -f *.o
 	rm -f $(LIB_NAME)
 	
-$(LIB_NAME) : $(OBJS)
-	$(ARCHIVE_CMD) $(ARCHIVE_OPTS) $(LIB_NAME) $(OBJS)
+$(AES_OBJS) :
+	cd ThirdParty/aes256 && make
+
+$(BASE64_OBJS) :
+	cd ThirdParty/base64 && make
+
+$(LIB_NAME) : $(OBJS) $(AES_OBJS) $(BASE64_OBJS)
+	$(ARCHIVE_CMD) $(ARCHIVE_OPTS) $(LIB_NAME) $(OBJS) $(AES_OBJS) $(BASE64_OBJS)
 
 %.o : %.cpp
 	$(CXX) $(CXX_OPTS) $< -o $@
