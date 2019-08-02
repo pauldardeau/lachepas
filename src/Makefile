@@ -26,6 +26,7 @@ GFSAdminClient.o \
 GFSClient.o \
 GFSExclusions.o \
 GFSMessage.o \
+GFSMessageCommands.o \
 GFSMessageHandler.o \
 GFSNodeAdmin.o \
 GFSOptions.o \

@@ -14,6 +14,7 @@
 #include "OSUtils.h"
 #include "StrUtils.h"
 #include "GFSMessage.h"
+#include "GFSMessageCommands.h"
 #include "FileReferenceCount.h"
 #include "GFS.h"
 #include "Encryption.h"
@@ -25,17 +26,6 @@ using namespace tonnerre;
 static const std::string EMPTY_STRING           = "";
 static const std::string SLASH                  = "/";
 static const std::string ZERO                   = "0";
-
-static const std::string MSG_DIR_STAT           = "dirStat";
-static const std::string MSG_DIR_LIST           = "dirList";
-
-static const std::string MSG_FILE_ADD           = "fileAdd";
-static const std::string MSG_FILE_UPDATE        = "fileUpdate";
-static const std::string MSG_FILE_DELETE        = "fileDelete";
-static const std::string MSG_FILE_RETRIEVE      = "fileRetrieve";
-static const std::string MSG_FILE_ID            = "fileId";
-static const std::string MSG_FILE_STAT          = "fileStat";
-static const std::string MSG_FILE_LIST          = "fileList";
 
 static const std::string ERR_MISSING_DIRECTORY  = "missing directory name";
 static const std::string ERR_MISSING_FILE       = "missing file name";
@@ -60,7 +50,7 @@ public:
                           const std::string& requestName,
                           const std::string& requestPayload,
                           std::string& responsePayload) {
-      if (requestName == MSG_DIR_STAT) {
+      if (requestName == GFSMessageCommands::MSG_DIR_STAT) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             //const std::string& directory =
             //   GFSMessage::getDirectory(requestMessage);
@@ -70,7 +60,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
-      } else if (requestName == MSG_DIR_LIST) {
+      } else if (requestName == GFSMessageCommands::MSG_DIR_LIST) {
          std::vector<std::string> listDirectories;
             
          if (m_server.dirList(listDirectories)) {
@@ -79,7 +69,7 @@ public:
          } else {
             encodeError(responseMessage, "unable to obtain directory list");
          }
-      } else if (requestName == MSG_FILE_ADD) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_ADD) {
          if (GFSMessage::hasFile(requestMessage)) {
             if (GFSMessage::hasUniqueIdentifier(requestMessage)) {
                const std::string& file = GFSMessage::getFile(requestMessage);
@@ -113,7 +103,7 @@ public:
             ::printf("hasFile returned false\n");
             encodeError(responseMessage, ERR_MISSING_FILE);
          }
-      } else if (requestName == MSG_FILE_UPDATE) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_UPDATE) {
          if (GFSMessage::hasFile(requestMessage)) {
             if (GFSMessage::hasDirectory(requestMessage)) {
                std::string directory = GFSMessage::getDirectory(requestMessage);
@@ -135,7 +125,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_FILE);
          }
-      } else if (requestName == MSG_FILE_DELETE) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_DELETE) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
                const std::string& directory =
@@ -153,7 +143,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
-      } else if (requestName == MSG_FILE_ID) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_ID) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
                const std::string& directory =
@@ -173,7 +163,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
-      } else if (requestName == MSG_FILE_STAT) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_STAT) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
                //const std::string& directory =
@@ -186,7 +176,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
-      } else if (requestName == MSG_FILE_LIST) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_LIST) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             const std::string& directory =
                GFSMessage::getDirectory(requestMessage);
@@ -201,7 +191,7 @@ public:
          } else {
             encodeError(responseMessage, ERR_MISSING_DIRECTORY);
          }
-      } else if (requestName == MSG_FILE_RETRIEVE) {
+      } else if (requestName == GFSMessageCommands::MSG_FILE_RETRIEVE) {
          if (GFSMessage::hasDirectory(requestMessage)) {
             if (GFSMessage::hasFile(requestMessage)) {
                const std::string& directory =

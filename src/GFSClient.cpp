@@ -23,6 +23,7 @@
 #include "Messaging.h"
 #include "Message.h"
 #include "GFSMessage.h"
+#include "GFSMessageCommands.h"
 #include "BasicException.h"
 #include "aes256.h"
 #include "IniReader.h"
@@ -45,17 +46,6 @@ static const std::string DB_FILE                = "gfs_db.sqlite3";
 
 static const std::string EMPTY_STRING           = "";
 static const std::string SINGLE_QUOTE           = "'";
-
-static const std::string MSG_DIR_STAT           = "dirStat";
-static const std::string MSG_DIR_LIST           = "dirList";
-
-static const std::string MSG_FILE_ADD           = "fileAdd";
-static const std::string MSG_FILE_UPDATE        = "fileUpdate";
-static const std::string MSG_FILE_DELETE        = "fileDelete";
-static const std::string MSG_FILE_RETRIEVE      = "fileRetrieve";
-static const std::string MSG_FILE_ID            = "fileId";
-static const std::string MSG_FILE_STAT          = "fileStat";
-static const std::string MSG_FILE_LIST          = "fileList";
 
 static const char FLAG_BLOCK_ALL        = 'A'; // process all blocks
 static const char FLAG_BLOCK_NONE       = 'N'; // process no blocks
@@ -462,7 +452,7 @@ int GFSClient::sendFile(int numBlockFiles,
          }
       
          if (addBlockToNode) {
-            Message message(MSG_FILE_ADD, MessageType::MessageTypeText);
+            Message message(GFSMessageCommands::MSG_FILE_ADD, MessageType::MessageTypeText);
             message.setTextPayload(b64FileContents);
             const int storedBlockSize = b64FileContents.size();
             GFSMessage::setStoredFileSize(message, storedBlockSize);
@@ -1260,7 +1250,7 @@ bool GFSClient::listNodeDirectories() {
    const std::string& nodeName = m_gfsOptions.getNode();
    
    if (!nodeName.empty()) {
-      Message message(MSG_DIR_LIST, MessageType::MessageTypeText);
+      Message message(GFSMessageCommands::MSG_DIR_LIST, MessageType::MessageTypeText);
 
       Message response;
       if (message.send(nodeName, response)) {
@@ -1302,7 +1292,7 @@ bool GFSClient::listNodeDirFiles() {
       const std::string& directory = m_gfsOptions.getDirectory();
       
       if (!directory.empty()) {
-         Message message(MSG_FILE_LIST, MessageType::MessageTypeText);
+         Message message(GFSMessageCommands::MSG_FILE_LIST, MessageType::MessageTypeText);
          GFSMessage::setDirectory(message, directory);
 
          Message response;
@@ -1567,7 +1557,7 @@ bool GFSClient::retrieveFile(const std::string& nodeName,
    if (!nodeName.empty()) {
       if (!directory.empty()) {
          if (!fileName.empty()) {
-            Message message(MSG_FILE_RETRIEVE, MessageType::MessageTypeText);
+            Message message(GFSMessageCommands::MSG_FILE_RETRIEVE, MessageType::MessageTypeText);
             GFSMessage::setDirectory(message, directory);
             GFSMessage::setFile(message, fileName);
    
