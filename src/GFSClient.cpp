@@ -405,7 +405,7 @@ int GFSClient::sendFile(int numBlockFiles,
          }
       }
 
-      if ((originBlockSize == 0) || (b64FileContents.size() == 0)) {
+      if ((originBlockSize == 0) || (b64FileContents.empty())) {
          // nothing to send
          return numNodeBlocksCopied;
       }
