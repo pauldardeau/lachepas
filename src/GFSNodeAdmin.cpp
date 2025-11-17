@@ -230,6 +230,7 @@ bool GFSNodeAdmin::uptimeSys(string& uptimeSeconds) {
    if (SystemStats::uptimeSeconds(uptimeSecondsValue)) {
       char secondsString[20];
       ::memset(secondsString, 0, sizeof(secondsString));
+      //TODO: make StrUtils::toString(long long) and use it here
       ::sprintf(secondsString, "%lld", uptimeSecondsValue);
       uptimeSeconds = secondsString;
       success = true;

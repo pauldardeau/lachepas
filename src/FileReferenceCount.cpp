@@ -16,6 +16,7 @@
 
 
 #include "FileReferenceCount.h"
+#include "StrUtils.h"
 
 #ifdef __linux__
 static const char ATTR_REF_COUNT[] = "user.refcount";
@@ -25,6 +26,7 @@ static const char ATTR_REF_COUNT[] = "refcount";
 
 using namespace std;
 using namespace lachepas;
+using namespace chaudiere;
 
 //******************************************************************************
 
@@ -57,7 +59,7 @@ long FileReferenceCount::referenceCountForFile(const string& filePath) {
    long refCountValue = 0L;
 
    if (numBytesRead > 0) {
-      refCountValue = ::atol(refcount);
+      refCountValue = StrUtils::parseLong(string(refcount));
    } else if (numBytesRead < 0) {
 #ifdef __linux__
       if (errno == ENODATA) {

@@ -6,9 +6,11 @@
 #include "GFSMessage.h"
 #include "Message.h"
 #include "StringTokenizer.h"
+#include "StrUtils.h"
 
 using namespace std;
 using namespace lachepas;
+using namespace chaudiere;
 
 static const string LIST_DELIMITER         = "|";
 
@@ -156,9 +158,7 @@ const string& GFSMessage::getUniqueIdentifier(const tonnerre::Message& message) 
 
 void GFSMessage::setOriginFileSize(tonnerre::Message& message,
                                    unsigned long fileSize) {
-   char fileSizeString[20];
-   ::snprintf(fileSizeString, 20, "%lu", fileSize);
-   GFSMessage::setKeyValue(message, KEY_ORIGIN_FS, fileSizeString);
+   GFSMessage::setKeyValue(message, KEY_ORIGIN_FS, StrUtils::toString(fileSize));
 }
 
 //******************************************************************************
@@ -183,9 +183,7 @@ unsigned long GFSMessage::getOriginFileSize(tonnerre::Message& message) {
 
 void GFSMessage::setStoredFileSize(tonnerre::Message& message,
                                    unsigned long fileSize) {
-   char fileSizeString[20];
-   ::snprintf(fileSizeString, 20, "%lu", fileSize);
-   GFSMessage::setKeyValue(message, KEY_STORED_FS, fileSizeString);
+   GFSMessage::setKeyValue(message, KEY_STORED_FS, StrUtils::toString(fileSize));
 }
 
 //******************************************************************************
