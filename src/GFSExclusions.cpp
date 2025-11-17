@@ -165,11 +165,11 @@ bool GFSExclusions::excludeDirectory(const string& dirName) const {
 
    if (!excludeDir) {
       if (!m_dirExclusionPrefixes.empty()) {
-         auto it = m_dirExclusionPrefixes.cbegin();
-         const auto itEnd = m_dirExclusionPrefixes.cend();
+         //auto it = m_dirExclusionPrefixes.cbegin();
+         //const auto itEnd = m_dirExclusionPrefixes.cend();
 
-         for (; it != itEnd; ++it) {
-            const string& dirExclusionPrefix = *it;
+         for (const auto& dirExclusionPrefix : m_dirExclusionPrefixes) {
+            //const string& dirExclusionPrefix = *it;
             if (StrUtils::startsWith(dirName, dirExclusionPrefix)) {
                excludeDir = true;
                break;
@@ -197,11 +197,7 @@ bool GFSExclusions::excludeFile(const string& fileName) const {
 
    if (!excludeFile) {
       if (!m_fileExclusionSuffixes.empty()) {
-         auto it = m_fileExclusionSuffixes.cbegin();
-         const auto itEnd = m_fileExclusionSuffixes.cend();
-
-         for (; it != itEnd; ++it) {
-            const string& fileExclusionSuffix = *it;
+         for (const auto& fileExclusionSuffix : m_fileExclusionSuffixes) {
             if (StrUtils::endsWith(fileName, fileExclusionSuffix)) {
                excludeFile = true;
                break;

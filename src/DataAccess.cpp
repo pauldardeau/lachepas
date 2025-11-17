@@ -408,7 +408,8 @@ bool DataAccess::open() {
 
 bool DataAccess::createTable(const string& sql) {
    if (m_dbConnection != nullptr) {
-      return m_dbConnection->executeUpdate(sql);
+      unsigned long rowsAffected = 0;
+      return m_dbConnection->executeUpdate(sql, rowsAffected);
    } else {
       Logger::error(MSG_NO_DB_CONNECTION);
       return false;
@@ -508,8 +509,10 @@ bool DataAccess::insertStorageNode(StorageNode& storageNode) {
          args.add(new DBString(nodeName));
          args.add(new DBBool(storageNode.getActive()));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_INSERT_STORAGE_NODE, args);
+            m_dbConnection->executeUpdate(SQL_INSERT_STORAGE_NODE, args, rowsAffected);
          if (dbUpdateSuccess) {
             storageNode.setStorageNodeId(m_dbConnection->lastInsertRowId());
          }
@@ -538,8 +541,10 @@ bool DataAccess::insertLocalDirectory(LocalDirectory& localDirectory) {
          args.add(new DBBool(localDirectory.getEncrypt()));
          args.add(new DBInt(localDirectory.getCopyCount()));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_INSERT_LOCAL_DIRECTORY, args);
+            m_dbConnection->executeUpdate(SQL_INSERT_LOCAL_DIRECTORY, args, rowsAffected);
          if (dbUpdateSuccess) {
             localDirectory.setLocalDirectoryId(m_dbConnection->lastInsertRowId());
          }
@@ -569,8 +574,10 @@ bool DataAccess::insertLocalFile(LocalFile& localFile) {
             args.add(new DBDate(localFile.getModifyTime()));
             args.add(new DBDate(localFile.getScanTime()));
 
+            unsigned long rowsAffected = 0;
+
             dbUpdateSuccess =
-               m_dbConnection->executeUpdate(SQL_INSERT_LOCAL_FILE, args);
+               m_dbConnection->executeUpdate(SQL_INSERT_LOCAL_FILE, args, rowsAffected);
             if (dbUpdateSuccess) {
                localFile.setLocalFileId(m_dbConnection->lastInsertRowId());
             }
@@ -602,7 +609,9 @@ bool DataAccess::insertVault(Vault& vault) {
             args.add(new DBBool(vault.getCompress()));
             args.add(new DBBool(vault.getEncrypt()));
 
-            dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_VAULT, args);
+            unsigned long rowsAffected = 0;
+
+            dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_VAULT, args, rowsAffected);
             if (dbUpdateSuccess) {
                vault.setVaultId(m_dbConnection->lastInsertRowId());
             }
@@ -641,8 +650,9 @@ bool DataAccess::insertVaultFile(VaultFile& vaultFile) {
             args.add(new DBString(vaultFile.getGroupPermissions().getPermissionsString()));
             args.add(new DBString(vaultFile.getOtherPermissions().getPermissionsString()));
 
+            unsigned long rowsAffected = 0;
 
-            dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_VAULT_FILE, args);
+            dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_VAULT_FILE, args, rowsAffected);
             if (dbUpdateSuccess) {
                vaultFile.setVaultFileId(m_dbConnection->lastInsertRowId());
             }
@@ -684,7 +694,9 @@ bool DataAccess::insertVaultFileBlock(VaultFileBlock& vaultFileBlock) {
                args.add(new DBString(nodeDirectory));
                args.add(new DBString(nodeFile));
 
-               dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_FILE_BLOCK, args);
+               unsigned long rowsAffected = 0;
+
+               dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_INSERT_FILE_BLOCK, args, rowsAffected);
                if (dbUpdateSuccess) {
                   vaultFileBlock.setVaultFileBlockId(m_dbConnection->lastInsertRowId());
                } else {
@@ -733,8 +745,10 @@ bool DataAccess::updateStorageNode(StorageNode& storageNode) {
             args.add(new DBDate(storageNode.getCopyTime()));
             args.add(new DBInt(storageNode.getStorageNodeId()));
 
+            unsigned long rowsAffected = 0;
+
             dbUpdateSuccess =
-               m_dbConnection->executeUpdate(SQL_UPDATE_ACTIVE_STORAGE_NODE, args);
+               m_dbConnection->executeUpdate(SQL_UPDATE_ACTIVE_STORAGE_NODE, args, rowsAffected);
          } else {
             Logger::error("unable to update storage node, node name missing");
          }
@@ -772,8 +786,10 @@ bool DataAccess::updateLocalDirectory(LocalDirectory& localDirectory) {
             args.add(new DBInt(copyCount));
             args.add(new DBInt(localDirectoryId));
 
+            unsigned long rowsAffected = 0;
+
             dbUpdateSuccess =
-               m_dbConnection->executeUpdate(SQL_UPDATE_LOCAL_DIRECTORY, args);
+               m_dbConnection->executeUpdate(SQL_UPDATE_LOCAL_DIRECTORY, args, rowsAffected);
          } else {
             Logger::error("unable to update local directory, invalid local directory id");
          }
@@ -806,8 +822,10 @@ bool DataAccess::updateLocalFile(LocalFile& localFile) {
                args.add(new DBDate(localFile.getScanTime()));
                args.add(new DBInt(localFileId));
 
+               unsigned long rowsAffected = 0;
+
                dbUpdateSuccess =
-                  m_dbConnection->executeUpdate(SQL_UPDATE_LOCAL_FILE, args);
+                  m_dbConnection->executeUpdate(SQL_UPDATE_LOCAL_FILE, args, rowsAffected);
             } else {
                Logger::error("unable to update local file, invalid local file id");
             }
@@ -846,7 +864,9 @@ bool DataAccess::updateVault(Vault& vault) {
                args.add(new DBBool(encrypt));
                args.add(new DBInt(vaultId));
 
-               dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_UPDATE_NODE_VAULT, args);
+               unsigned long rowsAffected = 0;
+
+               dbUpdateSuccess = m_dbConnection->executeUpdate(SQL_UPDATE_NODE_VAULT, args, rowsAffected);
             } else {
                Logger::error("unable to update vault, invalid local directory id");
             }
@@ -896,8 +916,10 @@ bool DataAccess::updateVaultFile(VaultFile& vaultFile) {
                args.add(new DBString(otherPermissions));
                args.add(new DBInt(vaultFileId));
 
+               unsigned long rowsAffected = 0;
+
                dbUpdateSuccess =
-                  m_dbConnection->executeUpdate(SQL_UPDATE_VAULT_FILE, args);
+                  m_dbConnection->executeUpdate(SQL_UPDATE_VAULT_FILE, args, rowsAffected);
             } else {
                Logger::error("unable to update vault file, invalid vault id");
             }
@@ -949,8 +971,10 @@ bool DataAccess::updateVaultFileBlock(VaultFileBlock& vaultFileBlock) {
                      args.add(new DBString(nodeFile));
                      args.add(new DBInt(vaultFileBlockId));
 
+                     unsigned long rowsAffected = 0;
+
                      dbUpdateSuccess =
-                        m_dbConnection->executeUpdate(SQL_UPDATE_FILE_BLOCK, args);
+                        m_dbConnection->executeUpdate(SQL_UPDATE_FILE_BLOCK, args, rowsAffected);
                   } else {
                      Logger::error("unable to update vault file block, missing node file");
                   }
@@ -983,8 +1007,10 @@ bool DataAccess::deleteActiveStorageNode(StorageNode& storageNode) {
          DBStatementArgs args;
          args.add(new DBInt(storageNodeId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_ACTIVE_STORAGE_NODE, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_ACTIVE_STORAGE_NODE, args, rowsAffected);
       } else {
          Logger::error("unable to delete storage node, invalid storage node id");
       }
@@ -1005,8 +1031,10 @@ bool DataAccess::deleteLocalDirectory(LocalDirectory& localDirectory) {
          DBStatementArgs args;
          args.add(new DBInt(localDirectoryId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_LOCAL_DIRECTORY, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_LOCAL_DIRECTORY, args, rowsAffected);
          if (dbUpdateSuccess) {
             localDirectory.setLocalDirectoryId(-1);
          }
@@ -1030,8 +1058,10 @@ bool DataAccess::deleteLocalFile(LocalFile& localFile) {
          DBStatementArgs args;
          args.add(new DBInt(localFileId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_LOCAL_FILE, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_LOCAL_FILE, args, rowsAffected);
          if (dbUpdateSuccess) {
             localFile.setLocalFileId(-1);
          }
@@ -1055,8 +1085,10 @@ bool DataAccess::deleteVault(Vault& vault) {
          DBStatementArgs args;
          args.add(new DBInt(vaultId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_NODE_VAULT, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_NODE_VAULT, args, rowsAffected);
          if (dbUpdateSuccess) {
             vault.setVaultId(-1);
          }
@@ -1080,8 +1112,10 @@ bool DataAccess::deleteVaultFile(VaultFile& vaultFile) {
          DBStatementArgs args;
          args.add(new DBInt(vaultFileId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_VAULT_FILE, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_VAULT_FILE, args, rowsAffected);
          if (dbUpdateSuccess) {
             vaultFile.setVaultFileId(-1);
          }
@@ -1105,8 +1139,10 @@ bool DataAccess::deleteVaultFileBlock(VaultFileBlock& vaultFileBlock) {
          DBStatementArgs args;
          args.add(new DBInt(vaultFileBlockId));
 
+         unsigned long rowsAffected = 0;
+
          dbUpdateSuccess =
-            m_dbConnection->executeUpdate(SQL_DELETE_FILE_BLOCK, args);
+            m_dbConnection->executeUpdate(SQL_DELETE_FILE_BLOCK, args, rowsAffected);
          if (dbUpdateSuccess) {
             vaultFileBlock.setVaultFileBlockId(-1);
          }

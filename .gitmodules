@@ -1,0 +1,6 @@
+[submodule "chapeau"]
+	path = chapeau
+	url = https://github.com/pauldardeau/chapeau
+[submodule "tonnerre"]
+	path = tonnerre
+	url = https://github.com/pauldardeau/tonnerre

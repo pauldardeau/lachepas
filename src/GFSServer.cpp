@@ -262,7 +262,7 @@ bool GFSServer::run(const string& directory,
                     const string& serviceName) {
    if (OSUtils::directoryExists(directory)) {
       if (OSUtils::pathExists(iniFilePath)) {
-         m_baseDir = directory
+         m_baseDir = directory;
 
          const char* pszDirPath = m_baseDir.c_str();
          DIR* dir;

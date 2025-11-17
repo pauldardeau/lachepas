@@ -145,7 +145,7 @@ bool FileReferenceCount::storeUpdatedReferenceCount(const string& filePath,
    }
 
    bool storeSuccess = false;
-   char refcount[12];
+   char refcount[21];
    ::memset(refcount, 0, sizeof(refcount));
    snprintf(refcount, sizeof(refcount), "%ld", refCountValue);
 

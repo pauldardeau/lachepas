@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 
-#include <openssl/evp.h>
+//#include <openssl/evp.h>
 
 #include "GFS.h"
-#include "Encryption.h"
+//#include "Encryption.h"
 #include "OSUtils.h"
 #include "Logger.h"
 #include "StrUtils.h"
@@ -33,14 +33,15 @@ string GFS::uniqueIdentifierForBuffer(const char* s, int length) {
       return EMPTY_STRING;
    }
 
-   return Encryption::SHA1ForString(s, length);
+   return "";
+   //return Encryption::SHA1ForString(s, length);
 }
 
 //******************************************************************************
 
 bool GFS::uniqueIdentifierForFile(const string& filePath,
                                   string& uniqueIdentifier) {
-
+/*
    FILE* f = ::fopen(filePath.c_str(), "r");
    if (f != nullptr) {
       const EVP_MD* sha1 = ::EVP_sha1();
@@ -102,6 +103,9 @@ bool GFS::uniqueIdentifierForFile(const string& filePath,
       // unable to open file
       return false;
    }
+   */
+
+   return false;
 }
 
 //******************************************************************************

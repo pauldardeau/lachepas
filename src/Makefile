@@ -3,8 +3,8 @@
 
 CC = cc
 CXX = c++
-CC_OPTS = -c -Wall -O2
-CXX_OPTS = -c -Wall -O2 -std=c++11 -I/usr/local/include -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
+CC_OPTS = -c -Wall -g
+CXX_OPTS = -c -Wall -g -std=c++20 -I/usr/local/include -I../chapeau/chaudiere/src -I../chapeau/src -I../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
 ARCHIVE_CMD = ar
 ARCHIVE_OPTS = rs
 
@@ -14,10 +14,9 @@ AES_OBJS = ./ThirdParty/aes256/aes256.o
 
 BASE64_OBJS = ./ThirdParty/base64/base64.o
 
-OBJS = AESEncryption.o \
-Data.o \
+# AESEncryption.o, Encryption.o
+OBJS = Data.o \
 DataAccess.o \
-Encryption.o \
 FilePermissions.o \
 FileReferenceCount.o \
 FileSync.o \
@@ -46,14 +45,14 @@ clean :
 	cd ThirdParty/aes256 && gmake clean
 	cd ThirdParty/base64 && gmake clean
 	
-$(AES_OBJS) :
-	cd ThirdParty/aes256 && gmake
+#$(AES_OBJS) :
+#	cd ThirdParty/aes256 && gmake
 
-$(BASE64_OBJS) :
-	cd ThirdParty/base64 && gmake
+#$(BASE64_OBJS) :
+#	cd ThirdParty/base64 && gmake
 
-$(LIB_NAME) : $(OBJS) $(AES_OBJS) $(BASE64_OBJS)
-	$(ARCHIVE_CMD) $(ARCHIVE_OPTS) $(LIB_NAME) $(OBJS) $(AES_OBJS) $(BASE64_OBJS)
+$(LIB_NAME) : $(OBJS)
+	$(ARCHIVE_CMD) $(ARCHIVE_OPTS) $(LIB_NAME) $(OBJS)
 
 %.o : %.cpp
 	$(CXX) $(CXX_OPTS) $< -o $@

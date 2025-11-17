@@ -143,7 +143,8 @@ bool TimeTToDateTime(time_t t, DateTime& dateTime) {
                          tm->tm_mday,
                          tm->tm_hour,
                          tm->tm_min,
-                         tm->tm_sec);
+                         tm->tm_sec,
+                         0);
       dateTime = timestamp;
       return true;
    }
@@ -947,11 +948,11 @@ void GFSClient::sync() {
             }
          }
 
-         auto itNodeList = m_activeNodes.cbegin();
-         const auto itNodeListEnd = m_activeNodes.cend();
+         //auto itNodeList = m_activeNodes.cbegin();
+         //const auto itNodeListEnd = m_activeNodes.cend();
 
-         for (; itNodeList != itNodeListEnd; ++itNodeList) {
-            const StorageNode& node = *itNodeList;
+         for (const auto& node : m_activeNodes) {
+            //const StorageNode& node = *itNodeList;
             const string& nodeName = node.getNodeName();
             const int storageNodeId = node.getStorageNodeId();
 
@@ -1014,10 +1015,10 @@ void GFSClient::listFiles() {
             const int dirId = localDirectory.getLocalDirectoryId();
             vector<LocalFile> listFiles;
             if (m_dataAccess->getLocalFilesForDirectory(dirId, listFiles)) {
-               auto it = listFiles.cbegin();
-               const auto itEnd = listFiles.cend();
-               for (; it != itEnd; ++it) {
-                  const LocalFile& localFile = *it;
+               //auto it = listFiles.cbegin();
+               //const auto itEnd = listFiles.cend();
+               for (const auto& localFile : listFiles) {
+                  //const LocalFile& localFile = *it;
                   const string& filePath = localFile.getFilePath();
                   Logger::debug(filePath);
                }
