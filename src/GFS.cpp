@@ -32,7 +32,7 @@ string GFS::uniqueIdentifierForBuffer(const char* s, int length) {
    if ((nullptr == s) || (length == 0)) {
       return EMPTY_STRING;
    }
-   
+
    return Encryption::SHA1ForString(s, length);
 }
 
@@ -48,14 +48,14 @@ bool GFS::uniqueIdentifierForFile(const string& filePath,
          ::printf("error: EVP_sha1 returned null\n");
          return false;
       }
-      
+
       EVP_MD_CTX* mdctx = ::EVP_MD_CTX_create();
-      
+
       if (nullptr == mdctx) {
          ::printf("error: EVP_MD_CTX_create returned null\n");
          return false;
       }
-      
+
       //::EVP_DigestInit(&mdctx, sha1);
       if (1 != ::EVP_DigestInit_ex(mdctx, sha1, nullptr)) {
          ::printf("error: EVP_DigestInit_ex failed\n");
@@ -83,12 +83,12 @@ bool GFS::uniqueIdentifierForFile(const string& filePath,
             }
          }
       }
-      
+
       ::fclose(f);
 
       unsigned char md_value[EVP_MAX_MD_SIZE];
       unsigned int md_len;
-      
+
       if (1 == ::EVP_DigestFinal_ex(mdctx, md_value, &md_len)) {
          ::EVP_MD_CTX_destroy(mdctx);
          uniqueIdentifier = Encryption::digestToHexString(md_value, md_len);
@@ -113,20 +113,20 @@ bool GFS::readFile(const string& filePath,
    if (f == nullptr) {
       return false;
    }
-    
+
    ::fseek(f, 0, SEEK_END);
    const long fileBytes = ::ftell(f);
    ::fseek(f, 0, SEEK_SET);
-    
+
    char* buffer = new char[fileBytes + 1];
    const size_t numObjectsRead = ::fread(buffer, fileBytes, 1, f);
    ::fclose(f);
-    
+
    if (numObjectsRead < 1) {
       delete [] buffer;
       return false;
    }
-    
+
    buffer[fileBytes] = '\0';
    fileContents = buffer;
    return true;

@@ -6,7 +6,7 @@
 #include "FilePermissions.h"
 
 namespace lachepas {
-   
+
 /**
  *
  */
@@ -17,27 +17,27 @@ public:
     * Default constructor
     */
    VaultFile();
-      
+
    /**
     * Copy constructor
     * @param copy the source of the copy
     */
    VaultFile(const VaultFile& copy);
-      
+
    /**
     * Copy operator
     * @param copy the source of the copy
     * @return the target of the copy
     */
    VaultFile& operator=(const VaultFile& copy);
-      
+
    /**
     *
     * @param createTime
     * @see chaudiere::DateTime()
     */
    void setCreateTime(const chaudiere::DateTime& createTime);
-      
+
    /**
     *
     * @return
@@ -51,20 +51,20 @@ public:
     * @see chaudiere::DateTime()
     */
    void setModifyTime(const chaudiere::DateTime& modifyTime);
-      
+
    /**
     *
     * @return
     * @see chaudiere::DateTime()
     */
    const chaudiere::DateTime& getModifyTime() const;
-      
+
    /**
     *
     * @param vaultFileId
     */
    void setVaultFileId(int vaultFileId);
-      
+
    /**
     *
     * @return
@@ -76,19 +76,19 @@ public:
     * @param localFileId
     */
    void setLocalFileId(int localFileId);
-      
+
    /**
     *
     * @return
     */
    int getLocalFileId() const;
-      
+
    /**
     *
     * @param vaultId
     */
    void setVaultId(int vaultId);
-      
+
    /**
     *
     * @return
@@ -100,31 +100,31 @@ public:
     * @param originFileSize
     */
    void setOriginFileSize(int originFileSize);
-      
+
    /**
     *
     * @return
     */
    int getOriginFileSize() const;
-      
+
    /**
     *
     * @param blockCount
     */
    void setBlockCount(int blockCount);
-      
+
    /**
     *
     * @return
     */
    int getBlockCount() const;
-      
+
    /**
     *
     * @param userPermissions
     */
    void setUserPermissions(const FilePermissions& userPermissions);
-      
+
    /**
     *
     * @return
@@ -136,7 +136,7 @@ public:
     * @param groupPermissions
     */
    void setGroupPermissions(const FilePermissions& groupPermissions);
-      
+
    /**
     *
     * @return
@@ -148,7 +148,7 @@ public:
     * @param otherPermissions
     */
    void setOtherPermissions(const FilePermissions& otherPermissions);
-      
+
    /**
     *
     * @return

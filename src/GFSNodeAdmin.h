@@ -25,12 +25,12 @@ public:
     * Default constructor
     */
    GFSNodeAdmin();
-      
+
    /**
     * Destructor
     */
    ~GFSNodeAdmin();
-      
+
    /**
     * Runs the server using the specified directory and messaging parameters
     * @param directory the directory to serve
@@ -46,13 +46,13 @@ public:
    // --------------------------------------
    // Operations once the server is running
    // --------------------------------------
-               
+
    /**
     *
     * @return
     */
    bool cpuStat();
-      
+
    /**
     *
     * @param device
@@ -71,14 +71,14 @@ public:
     * @return
     */
    bool vmStat();
-      
+
    /**
     *
     * @param responseMessage
     * @return
     */
    bool infoSys(tonnerre::Message& responseMessage);
-      
+
    /**
     *
     * @param uptimeSeconds

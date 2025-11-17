@@ -11,7 +11,7 @@
 namespace lachepas {
 
 class FileReferenceCount;
-   
+
 /**
  *
  */
@@ -28,21 +28,21 @@ protected:
    bool writeFile(const std::string& filePath,
                   const std::string& fileContents,
                   std::string& uniqueIdentifier);
-                     
+
    /**
     *
     * @param filePath
     * @return
     */
    long referenceCountForFile(const std::string& filePath);
-      
+
    /**
     *
     * @param filePath
     * @return
     */
    bool storeInitialReferenceCount(const std::string& filePath);
-      
+
    /**
     *
     * @param filePath
@@ -51,32 +51,32 @@ protected:
     */
    bool storeUpdatedReferenceCount(const std::string& filePath,
                                    long refCountValue);
-                                                 
+
    /**
     *
     * @param filePath
     * @return
     */
    bool incrementReferenceCount(const std::string& filePath);
-      
+
    /**
     *
     * @param filePath
     * @return
     */
    bool decrementReferenceCount(const std::string& filePath);
-      
+
 public:
    /**
     * Default constructor
     */
    GFSServer();
-      
+
    /**
     * Destructor
     */
    ~GFSServer();
-      
+
    /**
     * Initializes the specified directory (one-time) in preparation for serving files
     * @param directory the directory path to initialize
@@ -99,14 +99,14 @@ public:
    // --------------------------------------
    // Operations once the server is running
    // --------------------------------------
-               
+
    /**
     *
     * @param directory
     * @return
     */
    bool dirStat(const std::string& directory);
-      
+
    /**
     *
     * @param listDirectories
@@ -126,7 +126,7 @@ public:
                 const std::string& fileContents,
                 std::string& directory,
                 std::string& uniqueIdentifier);
-      
+
    /**
     *
     * @param fileContents
@@ -148,7 +148,7 @@ public:
     */
    bool fileDelete(const std::string& directory,
                    const std::string& fileName);
-      
+
    /**
     *
     * @param directory
@@ -159,7 +159,7 @@ public:
    bool fileUniqueIdentifier(const std::string& directory,
                              const std::string& fileName,
                              std::string& uniqueIdentifier);
-      
+
    //TODO: how to return file stat info?
    /**
     *
@@ -189,7 +189,7 @@ public:
    bool getPathForFile(const std::string& directory,
                        const std::string& fileName,
                        std::string& filePath);
-                          
+
    /**
     *
     * @param directory

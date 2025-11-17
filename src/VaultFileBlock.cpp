@@ -40,7 +40,7 @@ VaultFileBlock& VaultFileBlock::operator=(const VaultFileBlock& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_createTime = copy.m_createTime;
    m_modifyTime = copy.m_modifyTime;
    m_storedTime = copy.m_storedTime;

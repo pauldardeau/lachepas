@@ -6,7 +6,7 @@
 namespace lachepas {
 
 class Data;
-   
+
 class AESEncryption {
 
 public:
@@ -23,7 +23,7 @@ public:
    unsigned char* encrypt(const Data& key,
                           const Data& iv,
                           const std::string& plainText);
-      
+
    void test();
 };
 

@@ -10,33 +10,33 @@ namespace lachepas {
  *
  */
 class VaultFileBlock {
-      
+
 public:
    /**
     * Default constructor
     */
    VaultFileBlock();
-      
+
    /**
     * Copy constructor
     * @param copy the source of the copy
     */
    VaultFileBlock(const VaultFileBlock& copy);
-      
+
    /**
     * Copy operator
     * @param copy the source of the copy
     * @return the target of the copy
     */
    VaultFileBlock& operator=(const VaultFileBlock& copy);
-      
+
    /**
     *
     * @param createTime
     * @see chaudiere::DateTime()
     */
    void setCreateTime(const chaudiere::DateTime& createTime);
-      
+
    /**
     *
     * @return
@@ -50,7 +50,7 @@ public:
     * @see chaudiere::DateTime()
     */
    void setModifyTime(const chaudiere::DateTime& modifyTime);
-      
+
    /**
     *
     * @return
@@ -64,20 +64,20 @@ public:
     * @see chaudiere::DateTime()
     */
    void setStoredTime(const chaudiere::DateTime& storedTime);
-      
+
    /**
     *
     * @return
     * @see chaudiere::DateTime()
     */
    const chaudiere::DateTime& getStoredTime() const;
-      
+
    /**
     *
     * @param uniqueIdentifier
     */
    void setUniqueIdentifier(const std::string& uniqueIdentifier);
-      
+
    /**
     *
     * @return
@@ -89,7 +89,7 @@ public:
     * @param nodeDirectory
     */
    void setNodeDirectory(const std::string& nodeDirectory);
-      
+
    /**
     *
     * @return
@@ -101,7 +101,7 @@ public:
     * @param nodeFile
     */
    void setNodeFile(const std::string& nodeFile);
-      
+
    /**
     *
     * @return
@@ -113,7 +113,7 @@ public:
     * @param vaultFileBlockId
     */
    void setVaultFileBlockId(int vaultFileBlockId);
-      
+
    /**
     *
     * @return
@@ -125,7 +125,7 @@ public:
     * @param vaultFileId
     */
    void setVaultFileId(int vaultFileId);
-      
+
    /**
     *
     * @return
@@ -137,7 +137,7 @@ public:
     * @param originFileSize
     */
    void setOriginFileSize(int originFileSize);
-      
+
    /**
     *
     * @return
@@ -149,7 +149,7 @@ public:
     * @param storedFileSize
     */
    void setStoredFileSize(int storedFileSize);
-      
+
    /**
     *
     * @return
@@ -161,7 +161,7 @@ public:
     * @param blockSequenceNumber
     */
    void setBlockSequenceNumber(int blockSequenceNumber);
-      
+
    /**
     *
     * @return
@@ -173,7 +173,7 @@ public:
     * @param padCharCount
     */
    void setPadCharCount(int padCharCount);
-      
+
    /**
     *
     * @return

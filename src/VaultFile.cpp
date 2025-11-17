@@ -45,7 +45,7 @@ VaultFile& VaultFile::operator=(const VaultFile& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_createTime = copy.m_createTime;
    m_modifyTime = copy.m_modifyTime;
    m_userPermissions = copy.m_userPermissions;

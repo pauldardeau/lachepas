@@ -33,9 +33,9 @@ Data& Data::operator=(const Data& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_bytes = copy.m_bytes;
-   
+
    return *this;
 }
 
@@ -73,7 +73,7 @@ void Data::append(const Data& data) {
 
 void Data::bzero() {
    const size_t numBytes = size();
-   
+
    for (size_t i = 0; i < numBytes; ++i) {
       m_bytes[i] = 0;
    }

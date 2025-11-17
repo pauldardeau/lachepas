@@ -82,19 +82,19 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
    ::srand(::time(nullptr));
 
    m_baseDir = m_currentDir;
-   
+
    if (gfsOptions.getDebugMode()) {
       m_debugPrint = true;
    }
-   
+
    if (m_debugPrint) {
       Logger::debug(string("baseDir = '") +
                     m_baseDir +
                     string("'"));
    }
-   
+
    const string& configFile = gfsOptions.getConfigFile();
-   
+
    if (!configFile.empty()) {
       if (OSUtils::pathExists(configFile)) {
          try {
@@ -104,15 +104,15 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
             Logger::error("unable to read configuration file");
             return;
          }
-         
+
          Logger::info(string("initializing database with file: '") +
                       m_metaDataDBFile +
                       string("'"));
-         
+
          m_dataAccess = new DataAccess(m_metaDataDBFile);
          if (m_dataAccess->open()) {
             //Logger::info("successfully opened database");
-            
+
             if (m_dataAccess->getActiveStorageNodes(m_listNodes)) {
                if (m_listNodes.empty()) {
                   Logger::warning("no storage nodes defined");
@@ -120,7 +120,6 @@ GFSAdminClient::GFSAdminClient(const GFSOptions& gfsOptions) :
             } else {
                Logger::error("unable to retrieve storage nodes");
             }
-            
          } else {
             Logger::error("unable to open database");
          }
@@ -144,7 +143,7 @@ GFSAdminClient::~GFSAdminClient() {
 bool GFSAdminClient::lastFileRetrieve() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       Message message(MSG_LAST_FILE_RETRIEVE, MessageType::MessageTypeText);
       Message response;
@@ -170,7 +169,7 @@ bool GFSAdminClient::lastFileRetrieve() {
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -179,7 +178,7 @@ bool GFSAdminClient::lastFileRetrieve() {
 bool GFSAdminClient::lastFileUpdate() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       Message message(MSG_LAST_FILE_UPDATE, MessageType::MessageTypeText);
       Message response;
@@ -205,7 +204,7 @@ bool GFSAdminClient::lastFileUpdate() {
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -214,7 +213,7 @@ bool GFSAdminClient::lastFileUpdate() {
 bool GFSAdminClient::listDevices() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       Message message(MSG_LIST_DEVICES, MessageType::MessageTypeText);
       Message response;
@@ -242,7 +241,7 @@ bool GFSAdminClient::listDevices() {
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -251,13 +250,13 @@ bool GFSAdminClient::listDevices() {
 bool GFSAdminClient::statCpu() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       //TODO: implement statCpu
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -266,13 +265,13 @@ bool GFSAdminClient::statCpu() {
 bool GFSAdminClient::statDevice() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       //TODO: implement statDevice
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -281,13 +280,13 @@ bool GFSAdminClient::statDevice() {
 bool GFSAdminClient::statIO() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       //TODO: implement statIO
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -296,13 +295,13 @@ bool GFSAdminClient::statIO() {
 bool GFSAdminClient::statVM() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       //TODO: implement statVM
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 
@@ -311,7 +310,7 @@ bool GFSAdminClient::statVM() {
 bool GFSAdminClient::sysInfo() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       Message message(MSG_SYS_INFO, MessageType::MessageTypeText);
       Message response;
@@ -324,7 +323,7 @@ bool GFSAdminClient::sysInfo() {
                   ::printf("sysName: %s\n", sysName.c_str());
                }
             }
-            
+
             if (GFSMessage::hasKey(response, KEY_SYS_NODENAME)) {
                const string& nodeName =
                   GFSMessage::getKeyValue(response, KEY_SYS_NODENAME);
@@ -365,8 +364,8 @@ bool GFSAdminClient::sysInfo() {
    } else {
       Logger::error("missing node name");
    }
-   
-   return success;   
+
+   return success;
 }
 
 //******************************************************************************
@@ -374,7 +373,7 @@ bool GFSAdminClient::sysInfo() {
 bool GFSAdminClient::sysUptime() {
    bool success = false;
    const string& nodeName = m_gfsOptions.getNode();
-   
+
    if (!nodeName.empty()) {
       Message message(MSG_SYS_UPTIME, MessageType::MessageTypeText);
       Message response;
@@ -400,7 +399,7 @@ bool GFSAdminClient::sysUptime() {
    } else {
       Logger::error("missing node name");
    }
-   
+
    return success;
 }
 

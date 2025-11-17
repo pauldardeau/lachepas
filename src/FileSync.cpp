@@ -24,10 +24,10 @@ FileSync& FileSync::operator=(const FileSync& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_syncTime = copy.m_syncTime;
    m_vaultFileId = copy.m_vaultFileId;
-   
+
    return *this;
 }
 

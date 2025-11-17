@@ -40,7 +40,7 @@ GFSOptions& GFSOptions::operator=(const GFSOptions& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_directory = copy.m_directory;
    m_file = copy.m_file;
    m_targetDirectory = copy.m_targetDirectory;

@@ -39,9 +39,9 @@ FilePermissions& FilePermissions::operator=(const FilePermissions& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_permissions = copy.m_permissions;
-   
+
    return *this;
 }
 
@@ -61,19 +61,19 @@ void FilePermissions::setPermissionString(const string& permissions) {
 
 short FilePermissions::octalValue() const {
    short octalValue = 0;
-   
+
    if (hasReadPermission()) {
       octalValue += 4;
    }
-   
+
    if (hasWritePermission()) {
       octalValue += 2;
    }
-   
+
    if (hasExecutePermission()) {
       octalValue += 1;
    }
-   
+
    return octalValue;
 }
 

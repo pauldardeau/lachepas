@@ -19,12 +19,12 @@ class DataAccess;
 class LocalDirectory;
 class StorageNode;
 class VaultFile;
-   
+
 /**
  *
  */
 class GFSClient {
-      
+
 private:
    /**
     *
@@ -32,7 +32,7 @@ private:
     * @return
     */
    int indexForStorageNode(const std::string& nodeName);
-      
+
    /**
     *
     * @param dirPath
@@ -49,13 +49,13 @@ protected:
     */
    void scanDir(const std::string& dirPath,
                 const LocalDirectory& localDirectory);
-      
+
    /**
     *
     * @param dirPath
     */
    void scanProcessDirectory(const std::string& dirPath);
-      
+
    /**
     *
     * @param dirPath
@@ -65,7 +65,7 @@ protected:
    void scanProcessFile(const std::string& dirPath,
                         const std::string& fileName,
                         const LocalDirectory& localDirectory);
-                           
+
    /**
     *
     * @param filePath
@@ -73,7 +73,7 @@ protected:
     * @return
     */
    bool readFile(const std::string& filePath, std::string& fileContents);
-      
+
    /**
     *
     * @param numBlockFiles
@@ -92,7 +92,7 @@ protected:
                 std::map<int, VaultFile>& mapVaultIdToVaultFile,
                 chaudiere::DateTime& createTime,
                 chaudiere::DateTime& modifyTime);
-                   
+
    /**
     *
     * @param encryptionKey
@@ -105,7 +105,7 @@ protected:
                     const StorageNode& storageNode,
                     const LocalDirectory& sourceDirectory,
                     const std::string& targetDirectory);
-      
+
 public:
 
    /**
@@ -114,33 +114,33 @@ public:
     * @see GFSOptions()
     */
    GFSClient(const GFSOptions& gfsOptions);
-      
+
    /**
     * Destructor
     */
    ~GFSClient();
-      
+
    /**
     *
     */
    void initializeDirectory();
-      
+
    /**
     *
     */
    void sync();
-      
+
    /**
     *
     */
    void listFiles();
-      
+
    /**
     *
     * @return
     */
    int getNumberActiveStorageNodes() const;
-      
+
    /**
     *
     * @param index
@@ -148,7 +148,7 @@ public:
     * @see StorageNode()
     */
    StorageNode& getActiveStorageNode(int index);
-      
+
    /**
     *
     * @param vecStorageNodes
@@ -162,24 +162,24 @@ public:
     * @return
     */
    bool getInactiveStorageNodes(std::vector<StorageNode>& vecStorageNodes);
-      
+
    /**
     *
     */
    void listNodes();
-      
+
    /**
     *
     * @return
     */
    bool listNodeDirFiles();
-      
+
    /**
     *
     * @return
     */
    int getNumberActiveLocalDirectories() const;
-      
+
    /**
     *
     * @param index
@@ -187,7 +187,7 @@ public:
     * @see LocalDirectory()
     */
    LocalDirectory& getActiveLocalDirectory(int index);
-      
+
    /**
     *
     * @param vecLocalDirectories
@@ -203,98 +203,98 @@ public:
     * @return
     */
    bool getInactiveLocalDirectories(std::vector<LocalDirectory>& vecLocalDirectories);
-      
+
    /**
     *
     * @param localDirectory
     * @return
     */
    bool updateLocalDirectory(LocalDirectory& localDirectory);
-      
+
    /**
     *
     * @param localDirectory
     * @return
     */
    bool addLocalDirectory(LocalDirectory& localDirectory);
-      
+
    /**
     *
     * @param localDirectory
     * @return
     */
    bool deactivateLocalDirectory(LocalDirectory& localDirectory);
-      
+
    /**
     *
     * @param localDirectory
     * @return
     */
    bool activateLocalDirectory(LocalDirectory& localDirectory);
-      
+
    /**
     *
     * @return
     */
    bool listNodeDirectories();
-      
+
    /**
     *
     * @param storageNode
     * @return
     */
    bool updateStorageNode(StorageNode& storageNode);
-      
+
    /**
     *
     * @param storageNode
     * @return
     */
    bool addStorageNode(StorageNode& storageNode);
-      
+
    /**
     *
     * @param storageNode
     * @return
     */
    bool deactivateStorageNode(StorageNode& storageNode);
-      
+
    /**
     *
     * @param storageNode
     * @return
     */
    bool activateStorageNode(StorageNode& storageNode);
-      
+
    /**
     *
     */
    void addStorageNode();
-      
+
    /**
     *
     */
    void removeStorageNode();
-      
+
    /**
     *
     * @return
     */
    bool restore();
-      
+
    /**
     *
     * @param dirPath
     * @return
     */
    bool restoreSubdirectory(const std::string& dirPath);
-      
+
    /**
     *
     * @return
     */
    bool restoreFile();
-      
+
    /**
     *
     * @param nodeName
@@ -307,8 +307,8 @@ public:
                      const std::string& directory,
                      const std::string& fileName,
                      std::string& fileContents);
-      
-      
+
+
 private:
    std::map<std::string, Vault> m_mapNodeToVault;
    std::vector<StorageNode> m_activeNodes;

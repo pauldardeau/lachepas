@@ -6,7 +6,7 @@
 using namespace lachepas;
 
 //******************************************************************************
-      
+
 Vault::Vault() :
    m_vaultId(-1),
    m_storageNodeId(-1),
@@ -31,13 +31,13 @@ Vault& Vault::operator=(const Vault& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_vaultId = copy.m_vaultId;
    m_storageNodeId = copy.m_storageNodeId;
    m_localDirectoryId = copy.m_localDirectoryId;
    m_compress = copy.m_compress;
    m_encrypt = copy.m_encrypt;
-   
+
    return *this;
 }
 

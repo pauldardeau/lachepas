@@ -17,7 +17,7 @@ namespace lachepas {
 class DataAccess;
 class LocalDirectory;
 class StorageNode;
-   
+
 /**
  *
  */
@@ -30,66 +30,66 @@ public:
     * @see GFSOptions()
     */
    GFSAdminClient(const GFSOptions& gfsOptions);
-      
+
    /**
     * Destructor
     */
    ~GFSAdminClient();
-      
+
    /**
     *
     * @return
     */
    bool listDevices();
-      
+
    /**
     *
     * @return
     */
    bool statCpu();
-      
+
    /**
     *
     * @return
     */
    bool statDevice();
-      
+
    /**
     *
     * @return
     */
    bool statIO();
-      
+
    /**
     *
     * @return
     */
    bool statVM();
-      
+
    /**
     *
     * @return
     */
    bool sysInfo();
-      
+
    /**
     *
     * @return
     */
    bool sysUptime();
-      
+
    /**
     *
     * @return
     */
    bool lastFileRetrieve();
-      
+
    /**
     *
     * @return
     */
    bool lastFileUpdate();
-      
+
 private:
    std::map<std::string, Vault> m_mapNodeToVault;
    std::vector<StorageNode> m_listNodes;

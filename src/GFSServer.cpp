@@ -35,17 +35,17 @@ static const string ERR_NOT_IMPLEMENTED    = "not implemented";
 
 //******************************************************************************
 //******************************************************************************
-                                    
+
 class GFSStorageMessageHandler : public GFSMessageHandler {
 
 private:
    GFSServer& m_server;
-   
+
 public:
    GFSStorageMessageHandler(GFSServer& server) :
       m_server(server) {
    }
-   
+
    void handleTextMessage(const Message& requestMessage,
                           Message& responseMessage,
                           const string& requestName,
@@ -63,7 +63,7 @@ public:
          }
       } else if (requestName == GFSMessageCommands::MSG_DIR_LIST) {
          vector<string> listDirectories;
-            
+
          if (m_server.dirList(listDirectories)) {
             encodeSuccess(responseMessage);
             GFSMessage::setDirList(responseMessage, listDirectories);
@@ -78,9 +78,9 @@ public:
                string directory;
                string uniqueIdentifier =
                   GFSMessage::getUniqueIdentifier(requestMessage);
-               
+
                const string& fileContents = b64FileContents;
-               
+
                if (!fileContents.empty() &&
                    m_server.fileAdd(file, fileContents, directory, uniqueIdentifier)) {
                   encodeBool(responseMessage, true);
@@ -111,7 +111,7 @@ public:
                string file = GFSMessage::getFile(requestMessage);
                const string& fileContents = requestMessage.getTextPayload();
                string uniqueIdentifier;
-               
+
                if (m_server.fileUpdate(fileContents, directory, file, uniqueIdentifier)) {
                   encodeBool(responseMessage, true);
                   GFSMessage::setUniqueIdentifier(responseMessage, uniqueIdentifier);
@@ -132,7 +132,7 @@ public:
                const string& directory =
                   GFSMessage::getDirectory(requestMessage);
                const string& file = GFSMessage::getFile(requestMessage);
-               
+
                if (m_server.fileDelete(directory, file)) {
                   encodeBool(responseMessage, true);
                } else {
@@ -151,7 +151,7 @@ public:
                   GFSMessage::getDirectory(requestMessage);
                const string& file = GFSMessage::getFile(requestMessage);
                string uniqueIdentifier;
-               
+
                if (m_server.fileUniqueIdentifier(directory, file, uniqueIdentifier)) {
                   encodeSuccess(responseMessage);
                   GFSMessage::setUniqueIdentifier(responseMessage, uniqueIdentifier);
@@ -182,7 +182,7 @@ public:
             const string& directory =
                GFSMessage::getDirectory(requestMessage);
             vector<string> listFiles;
-            
+
             if (m_server.fileList(directory, listFiles)) {
                encodeSuccess(responseMessage);
                GFSMessage::setFileList(responseMessage, listFiles);
@@ -235,23 +235,23 @@ bool GFSServer::initializeDirectory(const string& directory) {
    const int numDirs = 100;
    int createdDirs = 0;
    char buffer[20];
-   
+
    for (int i = 0; i < numDirs; ++i) {
       ::memset(buffer, 0, 20);
       ::snprintf(buffer, 20, "%02d", i);
       string dirName = buffer;
-      
+
       string dirPath = directory;
       dirPath += "/";
       dirPath += dirName;
-      
+
       if (OSUtils::createPrivateDirectory(dirPath)) {
          ++createdDirs;
       } else {
          break;
       }
    }
-   
+
    return (numDirs == createdDirs);
 }
 
@@ -262,12 +262,12 @@ bool GFSServer::run(const string& directory,
                     const string& serviceName) {
    if (OSUtils::directoryExists(directory)) {
       if (OSUtils::pathExists(iniFilePath)) {
-         m_baseDir = directory;
-         
+         m_baseDir = directory
+
          const char* pszDirPath = m_baseDir.c_str();
          DIR* dir;
          struct dirent* entry;
-   
+
          if ((dir = ::opendir(pszDirPath)) != nullptr) {
             while ((entry = ::readdir(dir)) != nullptr) {
                if (entry->d_type & DT_DIR) {
@@ -313,19 +313,19 @@ bool GFSServer::dirList(vector<string>& listDirectories) {
    if (m_debugPrint) {
       Logger::debug("dirList called");
    }
-   
+
    const char* pszDirPath = m_baseDir.c_str();
    DIR* dir;
    struct dirent* entry;
    bool success = false;
-   
+
    if ((dir = ::opendir(pszDirPath)) != nullptr) {
       while ((entry = ::readdir(dir)) != nullptr) {
          if (entry->d_type & DT_DIR) {
             listDirectories.push_back(string(entry->d_name));
          }
       }
-      
+
       ::closedir(dir);
       success = true;
    } else {
@@ -343,18 +343,18 @@ bool GFSServer::getPathForFile(const string& directory,
                                const string& file,
                                string& filePath) {
    string dirPath = m_baseDir;
-   
+
    if (!directory.empty()) {
       if (!StrUtils::endsWith(dirPath, SLASH) &&
           !StrUtils::startsWith(directory, SLASH)) {
          dirPath += SLASH;
       }
-      
+
       dirPath += directory;
    }
-   
+
    filePath = OSUtils::pathJoin(dirPath, file);
-   
+
    return true;
 }
 
@@ -378,9 +378,9 @@ bool GFSServer::writeFile(const string& filePath,
                           string& uniqueIdentifier) {
    FILE* f = ::fopen(filePath.c_str(), "wt");
    if (f != nullptr) {
-      const size_t objectsWritten = 
+      const size_t objectsWritten =
            ::fwrite(fileContents.c_str(), fileContents.length(), 1, f);
-      
+
       if (objectsWritten > 0) {
          ::fflush(f);
          ::fsync(::fileno(f));
@@ -402,14 +402,14 @@ bool GFSServer::writeFile(const string& filePath,
       } else {
          ::printf("error: unable to write to file '%s'\n", filePath.c_str());
       }
-      
+
       if (f != nullptr) {
          ::fclose(f);
       }
    } else {
       ::printf("error: unable to open file '%s'\n", filePath.c_str());
    }
-   
+
    return false;
 }
 
@@ -446,7 +446,7 @@ bool GFSServer::incrementReferenceCount(const string& filePath) {
    }
 
    ++refCountValue;
-   
+
    return storeUpdatedReferenceCount(filePath, refCountValue);
 }
 
@@ -459,7 +459,7 @@ bool GFSServer::decrementReferenceCount(const string& filePath) {
    }
 
    --refCountValue;
-   
+
    return storeUpdatedReferenceCount(filePath, refCountValue);
 }
 
@@ -472,35 +472,35 @@ bool GFSServer::fileAdd(const string& fileName,
    if (m_debugPrint) {
       Logger::debug("fileAdd called");
    }
-   
+
    if (uniqueIdentifier.empty()) {
       ::printf("fileAdd: uniqueIdentifier empty, returning\n");
       return false;
    }
-   
+
    string dirName;
    int digitsFound = 0;
-   
+
    const int uniqueIdLength = uniqueIdentifier.length();
-   
+
    for (int i = 0; i < uniqueIdLength; ++i) {
       const char ch = uniqueIdentifier[i];
       if (ch >= '0' && ch <= '9') {
          ++digitsFound;
-         
+
          // is it a leading 0?
          if ((ch == '0') && (0 == digitsFound)) {
             // don't put it
          } else {
             dirName += ch;
          }
-         
+
          if (digitsFound == 2) {
             break;
          }
       }
    }
-   
+
    if (dirName.empty()) {
       dirName = "00";
    } else {
@@ -509,19 +509,19 @@ bool GFSServer::fileAdd(const string& fileName,
          dirName.insert(0, ZERO);
       }
    }
-   
+
    directory = dirName;
 
    string filePath;
    getPathForFile(directory, fileName, filePath);
-   
+
    if (filePath.empty()) {
       ::printf("error: filePath is empty for directory='%s', fileName='%s'\n",
                directory.c_str(),
                fileName.c_str());
       return false;
    }
-   
+
    if (OSUtils::pathExists(filePath)) {
       bool rc = incrementReferenceCount(filePath);
       return rc;
@@ -556,10 +556,10 @@ bool GFSServer::fileUpdate(const string& fileContents,
    // directory and file that stores the data is based on the unique
    // identifier of the file contents, an update of the data will mean
    // that the data will be stored in a new directory and file.
-   
+
    const string uniqueIDFileContents =
       GFS::uniqueIdentifierForString(fileContents);
-   
+
    if (uniqueIDFileContents != fileName) {
       if (fileDelete(directory, fileName)) {
          fileName = uniqueIDFileContents;
@@ -581,7 +581,7 @@ bool GFSServer::fileDelete(const string& directory,
    if (m_debugPrint) {
       Logger::debug("fileDelete called");
    }
-   
+
    string filePath;
    getPathForFile(directory, fileName, filePath);
 
@@ -611,12 +611,12 @@ bool GFSServer::fileStat(const string& directory,
    if (m_debugPrint) {
       Logger::debug("fileStat called");
    }
-   
+
    string filePath;
    getPathForFile(directory, fileName, filePath);
-   
+
    if (OSUtils::pathExists(filePath)) {
-      
+
    }
 
    //TODO: implement fileStat
@@ -630,33 +630,33 @@ bool GFSServer::fileList(const string& directory,
    if (m_debugPrint) {
       Logger::debug("fileList called");
    }
-   
+
    string dirPath = m_baseDir;
-   
+
    if (!directory.empty()) {
       if (!StrUtils::endsWith(dirPath, SLASH) &&
           !StrUtils::startsWith(directory, SLASH)) {
          dirPath += SLASH;
       }
-      
+
       dirPath += directory;
    } else {
       printf("no directory specified\n");
       return false;
    }
-   
+
    const char* pszDirPath = dirPath.c_str();
    DIR* dir;
    struct dirent* entry;
    bool success = false;
-   
+
    if ((dir = ::opendir(pszDirPath)) != nullptr) {
       while ((entry = ::readdir(dir)) != nullptr) {
          if (!(entry->d_type & DT_DIR)) {
             listFiles.push_back(string(entry->d_name));
          }
       }
-      
+
       ::closedir(dir);
       success = true;
    } else {
@@ -674,34 +674,34 @@ bool GFSServer::retrieveFileContents(const string& directory,
                                      const string& fileName,
                                      string& fileContents) {
    bool retrievalSuccess = false;
-   
+
    if (directory.empty()) {
       ::printf("retrieveFileContents: missing directory\n");
       return false;
    }
-   
+
    if (fileName.empty()) {
       ::printf("retrieveFileContents: missing file name\n");
       return false;
    }
-   
+
    string filePath;
    getPathForFile(directory, fileName, filePath);
-   
+
    if (filePath.empty()) {
       ::printf("error: filePath is empty for directory='%s', fileName='%s'\n",
                directory.c_str(),
                fileName.c_str());
       return false;
    }
-   
+
    if (OSUtils::pathExists(filePath)) {
       retrievalSuccess = GFS::readFile(filePath, fileContents);
    } else {
       ::printf("error: file does not exist\n");
    }
-   
-   return retrievalSuccess;                       
+
+   return retrievalSuccess;
 }
 
 //******************************************************************************

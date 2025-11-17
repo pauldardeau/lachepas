@@ -53,9 +53,9 @@ long FileReferenceCount::referenceCountForFile(const string& filePath) {
 #else
 #error no support for retrieving extended attribute
 #endif
-                 
+
    long refCountValue = 0L;
-   
+
    if (numBytesRead > 0) {
       refCountValue = ::atol(refcount);
    } else if (numBytesRead < 0) {
@@ -78,8 +78,8 @@ long FileReferenceCount::referenceCountForFile(const string& filePath) {
       ::printf("getxattr returned 0 for file '%s'\n", filePath.c_str());
       return -1L;
    }
-   
-   return refCountValue;   
+
+   return refCountValue;
 }
 
 //******************************************************************************
@@ -90,7 +90,7 @@ bool FileReferenceCount::storeInitialReferenceCount(const string& filePath) {
    memset(refcount, 0, sizeof(refcount));
    refcount[0] = '1';
 
-#ifdef __FreeBSD__   
+#ifdef __FreeBSD__
    const ssize_t numBytesWritten =
       ::extattr_set_file(filePath.c_str(),
                          EXTATTR_NAMESPACE_USER,
@@ -143,7 +143,7 @@ bool FileReferenceCount::storeUpdatedReferenceCount(const string& filePath,
    if (refCountValue < 1L) {
       return false;
    }
-   
+
    bool storeSuccess = false;
    char refcount[12];
    ::memset(refcount, 0, sizeof(refcount));

@@ -27,43 +27,43 @@ public:
     * @param filePath
     */
    explicit DataAccess(const std::string& filePath);
-   
+
    /**
     * Destructor
     */
    ~DataAccess();
-   
+
    /**
     *
     * @return
     */
    bool open();
-   
+
    /**
     *
     * @param sql
     * @return
     */
    bool createTable(const std::string& sql);
-   
+
    /**
     *
     * @return
     */
    bool createTables();
-   
+
    /**
     *
     * @return
     */
    bool haveTables();
-   
+
    /**
     *
     * @return
     */
    bool commit();
-   
+
    /**
     *
     * @return
@@ -85,7 +85,7 @@ public:
     * @see LocalDirectory()
     */
    bool insertLocalDirectory(LocalDirectory& localDirectory);
-   
+
    /**
     *
     * @param localFile
@@ -93,7 +93,7 @@ public:
     * @see LocalFile()
     */
    bool insertLocalFile(LocalFile& localFile);
-   
+
    /**
     *
     * @param vault
@@ -101,7 +101,7 @@ public:
     * @see Vault()
     */
    bool insertVault(Vault& vault);
-   
+
    /**
     *
     * @param vaultFile
@@ -109,7 +109,7 @@ public:
     * @see VaultFile()
     */
    bool insertVaultFile(VaultFile& vaultFile);
-   
+
    /**
     *
     * @param vaultFileBlock
@@ -117,7 +117,7 @@ public:
     * @see VaultFileBlock()
     */
    bool insertVaultFileBlock(VaultFileBlock& vaultFileBlock);
-   
+
    /**
     *
     * @param storageNode
@@ -125,7 +125,7 @@ public:
     * @see StorageNode()
     */
    bool updateStorageNode(StorageNode& storageNode);
-   
+
    /**
     *
     * @param localDirectory
@@ -133,7 +133,7 @@ public:
     * @see LocalDirectory()
     */
    bool updateLocalDirectory(LocalDirectory& localDirectory);
-   
+
    /**
     *
     * @param localFile
@@ -141,7 +141,7 @@ public:
     * @see LocalFile()
     */
    bool updateLocalFile(LocalFile& localFile);
-   
+
    /**
     *
     * @param vault
@@ -149,7 +149,7 @@ public:
     * @see Vault()
     */
    bool updateVault(Vault& vault);
-   
+
    /**
     *
     * @param vaultFile
@@ -157,7 +157,7 @@ public:
     * @see VaultFile()
     */
    bool updateVaultFile(VaultFile& vaultFile);
-   
+
    /**
     *
     * @param vaultFileBlock
@@ -165,7 +165,7 @@ public:
     * @see VaultFileBlock()
     */
    bool updateVaultFileBlock(VaultFileBlock& vaultFileBlock);
-   
+
    /**
     *
     * @param storageNode
@@ -173,7 +173,7 @@ public:
     * @see StorageNode()
     */
    bool deleteActiveStorageNode(StorageNode& storageNode);
-   
+
    /**
     *
     * @param localDirectory
@@ -181,7 +181,7 @@ public:
     * @see LocalDirectory()
     */
    bool deleteLocalDirectory(LocalDirectory& localDirectory);
-   
+
    /**
     *
     * @param localFile
@@ -189,7 +189,7 @@ public:
     * @see LocalFile()
     */
    bool deleteLocalFile(LocalFile& localFile);
-   
+
    /**
     *
     * @param vault
@@ -197,7 +197,7 @@ public:
     * @see Vault()
     */
    bool deleteVault(Vault& vault);
-   
+
    /**
     *
     * @param vaultFile
@@ -205,7 +205,7 @@ public:
     * @see VaultFile()
     */
    bool deleteVaultFile(VaultFile& vaultFile);
-   
+
    /**
     *
     * @param vaultFileBlock
@@ -213,7 +213,7 @@ public:
     * @see VaultFileBlock()
     */
    bool deleteVaultFileBlock(VaultFileBlock& vaultFileBlock);
-   
+
    /**
     *
     * @param listNodes
@@ -229,7 +229,7 @@ public:
     * @see StorageNode()
     */
    bool getInactiveStorageNodes(std::vector<StorageNode>& listNodes);
-   
+
    /**
     *
     * @param listDirectories
@@ -245,7 +245,7 @@ public:
     * @see LocalDirectory()
     */
    bool getInactiveLocalDirectories(std::vector<LocalDirectory>& listDirectories);
-   
+
    /**
     *
     * @param localDirectoryId
@@ -257,7 +257,7 @@ public:
    bool getLocalFile(int localDirectoryId,
                      const std::string& filePath,
                      LocalFile& localFile);
-   
+
    /**
     *
     * @param localDirectoryId
@@ -267,7 +267,7 @@ public:
     */
    bool getLocalFilesForDirectory(int localDirectoryId,
                                   std::vector<LocalFile>& listFiles);
-      
+
    /**
     *
     * @param storageNodeId
@@ -277,7 +277,7 @@ public:
     * @see Vault()
     */
    bool getVault(int storageNodeId, int localDirectoryId, Vault& vault);
-   
+
    /**
     *
     * @param vaultId
@@ -287,7 +287,7 @@ public:
     * @see VaultFile()
     */
    bool getVaultFile(int vaultId, int localFileId, VaultFile& vaultFile);
-   
+
    /**
     *
     * @param vaultFileId
@@ -297,7 +297,7 @@ public:
     */
    bool getBlocksForVaultFile(int vaultFileId,
                               std::vector<VaultFileBlock>& listFileBlocks);
-   
+
 
 protected:
    bool getStorageNodes(const std::string& query,
@@ -305,12 +305,12 @@ protected:
    bool getLocalDirectories(const std::string& query,
                             std::vector<LocalDirectory>& listDirectories);
 
-   
+
 private:
    chapeau::Database* m_dbConnection;
    std::string m_dbFilePath;
    bool m_debugPrint;
-   
+
    // not available
    DataAccess(const DataAccess&);
    DataAccess& operator=(const DataAccess&);

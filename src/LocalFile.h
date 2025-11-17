@@ -21,33 +21,33 @@ private:
    chaudiere::DateTime m_modifyTime;
    chaudiere::DateTime m_scanTime;
    chaudiere::DateTime m_copyTime;
-      
+
 public:
    /**
     * Default constructor
     */
    LocalFile();
-      
+
    /**
     * Copy constructor
     * @param copy the source of the copy
     */
    LocalFile(const LocalFile& copy);
-      
+
    /**
     * Copy operator
     * @param copy the source of the copy
     * @return target of the copy
     */
    LocalFile& operator=(const LocalFile& copy);
-      
+
    /**
     *
     * @param filePath
     * @return
     */
    void setFilePath(const std::string& filePath);
-      
+
    /**
     *
     * @return
@@ -59,32 +59,32 @@ public:
     * @param localFileId
     */
    void setLocalFileId(int localFileId);
-      
+
    /**
     *
     * @return
     */
    int getLocalFileId() const;
-      
+
    /**
     *
     * @param localDirectoryId
     */
    void setLocalDirectoryId(int localDirectoryId);
-      
+
    /**
     *
     * @return
     */
    int getLocalDirectoryId() const;
-      
+
    /**
     *
     * @param createTime
     * @see chaudiere::DateTime()
     */
    void setCreateTime(const chaudiere::DateTime& createTime);
-      
+
    /**
     *
     * @return
@@ -98,7 +98,7 @@ public:
     * @see chaudiere::DateTime()
     */
    void setModifyTime(const chaudiere::DateTime& modifyTime);
-      
+
    /**
     *
     * @return
@@ -112,7 +112,7 @@ public:
     * @see chaudiere::DateTime()
     */
    void setScanTime(const chaudiere::DateTime& scanTime);
-      
+
    /**
     *
     * @return
@@ -126,14 +126,14 @@ public:
     * @see chaudiere::DateTime()
     */
    void setCopyTime(const chaudiere::DateTime& copyTime);
-      
+
    /**
     *
     * @return
     * @see chaudiere::DateTime()
     */
    const chaudiere::DateTime& getCopyTime();
-      
+
 };
 
 }

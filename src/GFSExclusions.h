@@ -27,69 +27,68 @@ public:
     *
     */
    GFSExclusions();
-                    
+
    /**
     * Copy constructor
     * @param copy source of copy
     */
    GFSExclusions(const GFSExclusions& copy);
-      
+
    /**
     * Destructor
     */
    ~GFSExclusions();
-      
+
    bool haveExclusions() const;
-      
+
    bool retrieveExclusions(const std::string& dirName,
                            const chaudiere::SectionedConfigDataSource& dataSource);
-      
+
    /**
     * Copy operator
     * @param copy source of the copy
     * @return target of the copy
     */
    GFSExclusions& operator=(const GFSExclusions& copy);
-   
+
    /**
     *
     * @param dirName
     * @return
     */
    bool excludeDirectory(const std::string& dirName) const;
-      
+
    /**
     *
     * @param fileName
     * @return
     */
    bool excludeFile(const std::string& fileName) const;
-      
+
    /**
     * Retrieve names of directories to be excluded
     * @return list of directory names to be excluded
     */
    const std::vector<std::string>& getDirExclusionNames() const;
-      
+
    /**
     * Retrieve prefixes of directories to be excluded
     * @return list of directory name prefixes to be excluded
     */
    const std::vector<std::string>& getDirExclusionPrefixes() const;
-      
+
    /**
     * Retrieve names of files to be excluded
     * @return list of file names to be excluded
     */
    const std::vector<std::string>& getFileExclusionNames() const;
-      
+
    /**
     * Retrieve suffixes of files to be excluded
     * @return list of file name suffixes to be excluded
     */
    const std::vector<std::string>& getFileExclusionSuffixes() const;
-   
-   
+
    /**
     *
     * @param kvpExclusions

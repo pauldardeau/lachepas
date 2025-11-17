@@ -61,17 +61,17 @@ static const string ERR_NOT_RECOGNIZED     = "unrecognized message";
 
 //******************************************************************************
 //******************************************************************************
-                                    
+
 class GFSAdminMessageHandler : public GFSMessageHandler
 {
 private:
    GFSNodeAdmin& m_nodeAdmin;
-   
+
 public:
    GFSAdminMessageHandler(GFSNodeAdmin& nodeAdmin) :
       m_nodeAdmin(nodeAdmin) {
    }
-   
+
    void handleTextMessage(const Message& requestMessage,
                           Message& responseMessage,
                           const string& requestName,
@@ -103,7 +103,7 @@ public:
          }
       } else if (requestName == MSG_LIST_DEVICES) {
          vector<string> listDevices;
-            
+
          if (m_nodeAdmin.deviceList(listDevices)) {
             encodeSuccess(responseMessage);
             GFSMessage::setDirList(responseMessage, listDevices);
@@ -131,7 +131,7 @@ public:
             encodeError(responseMessage, "unable to obtain last file update");
          }
       } else {
-         encodeError(responseMessage, ERR_NOT_RECOGNIZED);         
+         encodeError(responseMessage, ERR_NOT_RECOGNIZED);
       }
    }
 };
@@ -156,7 +156,7 @@ bool GFSNodeAdmin::run(const string& directory,
    if (OSUtils::directoryExists(directory)) {
       if (OSUtils::pathExists(iniFilePath)) {
          m_baseDir = directory;
-         
+
          MessagingServer server(iniFilePath, serviceName);
          GFSAdminMessageHandler handler(*this);
          server.setMessageHandler(&handler);
@@ -207,7 +207,7 @@ bool GFSNodeAdmin::vmStat() {
 
 bool GFSNodeAdmin::infoSys(tonnerre::Message& responseMessage) {
    bool success = false;
-   
+
    chaudiere::SystemInfo systemInfo;
    if (systemInfo.retrievedSystemInfo()) {
       GFSMessage::setKeyValue(responseMessage, KEY_SYS_SYSNAME, systemInfo.sysName());
@@ -217,7 +217,7 @@ bool GFSNodeAdmin::infoSys(tonnerre::Message& responseMessage) {
       GFSMessage::setKeyValue(responseMessage, KEY_SYS_MACHINE, systemInfo.machine());
       success = true;
    }
-   
+
    return success;
 }
 
@@ -226,7 +226,7 @@ bool GFSNodeAdmin::infoSys(tonnerre::Message& responseMessage) {
 bool GFSNodeAdmin::uptimeSys(string& uptimeSeconds) {
    bool success = false;
    long long uptimeSecondsValue = 0L;
-   
+
    if (SystemStats::uptimeSeconds(uptimeSecondsValue)) {
       char secondsString[20];
       ::memset(secondsString, 0, sizeof(secondsString));
@@ -236,7 +236,7 @@ bool GFSNodeAdmin::uptimeSys(string& uptimeSeconds) {
    } else {
       ::printf("SystemStats::uptimeSeconds failed\n");
    }
-   
+
    return success;
 }
 
@@ -246,7 +246,7 @@ bool GFSNodeAdmin::deviceList(vector<string>& listDevices) {
    if (m_debugPrint) {
       Logger::debug("deviceList called");
    }
-   
+
    bool success = false;
 
    //TODO: implement deviceList

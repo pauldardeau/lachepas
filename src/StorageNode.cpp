@@ -34,7 +34,7 @@ StorageNode& StorageNode::operator=(const StorageNode& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_serviceInfo = copy.m_serviceInfo;
    m_pingTime = copy.m_pingTime;
    m_copyTime = copy.m_copyTime;
@@ -43,7 +43,7 @@ StorageNode& StorageNode::operator=(const StorageNode& copy) {
    m_compress = copy.m_compress;
    m_encrypt = copy.m_encrypt;
    m_active = copy.m_active;
-   
+
    return *this;
 }
 

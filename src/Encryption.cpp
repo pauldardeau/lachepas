@@ -34,7 +34,7 @@ string Encryption::digestToHexString(const unsigned char* digest,
    char* heapBuffer = nullptr;
    char* hexstring = stackBuffer;
    bool usingStackBuffer = true;
-   
+
    if (len >= HALF_BUFFER_SIZE) {
       const int heapBufferSize = (len * 2) + 1;
       heapBuffer = (char*) ::malloc(heapBufferSize);
@@ -49,7 +49,7 @@ string Encryption::digestToHexString(const unsigned char* digest,
    } else {
       ::memset(stackBuffer, 0, sizeof(stackBuffer));
    }
-   
+
    for (int i = 0; i < len; ++i) {
       ::sprintf(&hexstring[2*i], "%02x", digest[i]);
    }
@@ -59,7 +59,7 @@ string Encryption::digestToHexString(const unsigned char* digest,
    } else {
       string hex(hexstring);
       ::free(hexstring);
-      return hex;   
+      return hex;
    }
 }
 
@@ -127,11 +127,11 @@ string Encryption::base64Encode(unsigned char const* buffer,
       char* encodedStr = new char[encodedLength];
       const int bytesEncoded = ::Base64encode(encodedStr, (const char*) buffer, len);
       string encodedString;
-      
+
       if (bytesEncoded > 0) {
          encodedString = encodedStr;
       }
-      
+
       delete [] encodedStr;
       return encodedString;
    } else {

@@ -35,7 +35,7 @@ LocalDirectory& LocalDirectory::operator=(const LocalDirectory& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_directoryPath = copy.m_directoryPath;
    m_localDirectoryId = copy.m_localDirectoryId;
    m_copyCount = copy.m_copyCount;
@@ -43,7 +43,7 @@ LocalDirectory& LocalDirectory::operator=(const LocalDirectory& copy) {
    m_recurse = copy.m_recurse;
    m_compress = copy.m_compress;
    m_encrypt = copy.m_encrypt;
-   
+
    return *this;
 }
 
@@ -118,7 +118,7 @@ void LocalDirectory::setEncrypt(bool encrypt) {
 bool LocalDirectory::getEncrypt() const {
    return m_encrypt;
 }
-      
+
 //******************************************************************************
 
 void LocalDirectory::setActive(bool active) {

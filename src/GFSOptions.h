@@ -25,38 +25,38 @@ private:
    bool m_useEncryption;
    bool m_useCompression;
    bool m_recurse;
-      
+
 public:
    /**
     * Default constructor
     */
    GFSOptions();
-      
+
    /**
     * Copy constructor
     * @param copy source of copy
     */
    GFSOptions(const GFSOptions& copy);
-      
+
    /**
     * Copy operator
     * @param copy source of the copy
     * @return reference to the target of the copy
     */
    GFSOptions& operator=(const GFSOptions& copy);
-      
+
    /**
     *
     * @return
     */
    bool validateOptions() const;
-      
+
    /**
     *
     * @param directory
     */
    void setDirectory(const std::string& directory);
-      
+
    /**
     *
     * @return
@@ -68,7 +68,7 @@ public:
     * @param targetDirectory
    */
    void setTargetDirectory(const std::string& targetDirectory);
-     
+
    /**
     *
     * @return
@@ -80,7 +80,7 @@ public:
     * @param file
     */
    void setFile(const std::string& file);
-     
+
    /**
     *
     * @return
@@ -92,7 +92,7 @@ public:
     * @param encryptionKey
     */
    void setEncryptionKey(const std::string& encryptionKey);
-      
+
    /**
     *
     * @return
@@ -104,7 +104,7 @@ public:
     * @param encryptionKeyFile
     */
    void setEncryptionKeyFile(const std::string& encryptionKeyFile);
-      
+
    /**
     *
     * @return
@@ -116,7 +116,7 @@ public:
     * @param encryptionIV
     */
    void setEncryptionIV(const std::string& encryptionIV);
-      
+
    /**
     *
     * @return
@@ -128,7 +128,7 @@ public:
     * @param configFile
     */
    void setConfigFile(const std::string& configFile);
-      
+
    /**
     *
     * @return
@@ -140,7 +140,7 @@ public:
     * @param node
     */
    void setNode(const std::string& node);
-      
+
    /**
     *
     * @return
@@ -152,7 +152,7 @@ public:
     * @param copyCount
     */
    void setCopyCount(int copyCount);
-      
+
    /**
     *
     * @return
@@ -164,7 +164,7 @@ public:
     * @param debugMode
     */
    void setDebugMode(bool debugMode);
-      
+
    /**
     *
     * @return
@@ -176,7 +176,7 @@ public:
     * @param useEncryption
     */
    void setUseEncryption(bool useEncryption);
-      
+
    /**
     *
     * @return
@@ -188,7 +188,7 @@ public:
     * @param useCompression
     */
    void setUseCompression(bool useCompression);
-      
+
    /**
     *
     * @return
@@ -200,13 +200,13 @@ public:
     * @param recurse
     */
    void setRecurse(bool recurse);
-      
+
    /**
     *
     * @return
     */
    bool getRecurse() const;
-      
+
 };
 
 }

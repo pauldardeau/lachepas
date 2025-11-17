@@ -31,7 +31,7 @@ LocalFile& LocalFile::operator=(const LocalFile& copy) {
    if (this == &copy) {
       return *this;
    }
-   
+
    m_filePath = copy.m_filePath;
    m_localFileId = copy.m_localFileId;
    m_localDirectoryId = copy.m_localDirectoryId;
