@@ -87,7 +87,7 @@ void LocalFile::setCreateTime(const chaudiere::DateTime& createTime) {
 
 //******************************************************************************
 
-const chaudiere::DateTime& LocalFile::getCreateTime() {
+const chaudiere::DateTime& LocalFile::getCreateTime() const {
    return m_createTime;
 }
 
@@ -99,7 +99,7 @@ void LocalFile::setModifyTime(const chaudiere::DateTime& modifyTime) {
 
 //******************************************************************************
 
-const chaudiere::DateTime& LocalFile::getModifyTime() {
+const chaudiere::DateTime& LocalFile::getModifyTime() const {
    return m_modifyTime;
 }
 
@@ -111,7 +111,7 @@ void LocalFile::setScanTime(const chaudiere::DateTime& scanTime) {
 
 //******************************************************************************
 
-const chaudiere::DateTime& LocalFile::getScanTime() {
+const chaudiere::DateTime& LocalFile::getScanTime() const {
    return m_scanTime;
 }
 
@@ -123,7 +123,7 @@ void LocalFile::setCopyTime(const chaudiere::DateTime& copyTime) {
 
 //******************************************************************************
 
-const chaudiere::DateTime& LocalFile::getCopyTime() {
+const chaudiere::DateTime& LocalFile::getCopyTime() const {
    return m_copyTime;
 }
 

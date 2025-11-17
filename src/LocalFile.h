@@ -90,7 +90,7 @@ public:
     * @return
     * @see chaudiere::DateTime()
     */
-   const chaudiere::DateTime& getCreateTime();
+   const chaudiere::DateTime& getCreateTime() const;
 
    /**
     *
@@ -104,7 +104,7 @@ public:
     * @return
     * @see chaudiere::DateTime()
     */
-   const chaudiere::DateTime& getModifyTime();
+   const chaudiere::DateTime& getModifyTime() const;
 
    /**
     *
@@ -118,7 +118,7 @@ public:
     * @return
     * @see chaudiere::DateTime()
     */
-   const chaudiere::DateTime& getScanTime();
+   const chaudiere::DateTime& getScanTime() const;
 
    /**
     *
@@ -132,7 +132,7 @@ public:
     * @return
     * @see chaudiere::DateTime()
     */
-   const chaudiere::DateTime& getCopyTime();
+   const chaudiere::DateTime& getCopyTime() const;
 
 };
 
