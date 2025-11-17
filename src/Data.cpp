@@ -59,7 +59,7 @@ void Data::append(unsigned char chByte) {
 
 //*****************************************************************************
 
-void Data::append(const vector<unsigned char> vecBytes) {
+void Data::append(const vector<unsigned char>& vecBytes) {
    m_bytes.insert(m_bytes.end(), vecBytes.begin(), vecBytes.end());
 }
 

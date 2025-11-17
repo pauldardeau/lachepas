@@ -23,7 +23,7 @@ public:
    std::size_t size() const;
 
    void append(unsigned char chByte);
-   void append(const std::vector<unsigned char> vecBytes);
+   void append(const std::vector<unsigned char>& vecBytes);
    void append(const Data& data);
 
    void bzero();
