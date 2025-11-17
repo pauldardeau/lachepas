@@ -1,8 +1,8 @@
 # Copyright Paul Dardeau, 2016
 # BSD License
 
-CC = clang
-CXX = clang++
+CC = cc
+CXX = c++
 CC_OPTS = -c -Wall -O2
 CXX_OPTS = -c -Wall -O2 -std=c++11 -I/usr/local/include -I../../chaudiere/src -I../../chapeau/src -I../../tonnerre/src -I./ThirdParty/aes256 -I./ThirdParty/base64
 ARCHIVE_CMD = ar
