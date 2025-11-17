@@ -29,7 +29,7 @@ using namespace lachepas;
 //******************************************************************************
 
 string Encryption::digestToHexString(const unsigned char* digest,
-                                          int len) {
+                                     int len) {
    char stackBuffer[STACK_BUFFER_BYTES];
    char* heapBuffer = nullptr;
    char* hexstring = stackBuffer;
@@ -96,11 +96,11 @@ string Encryption::SHA1ForString(const char* str, int length) {
 //******************************************************************************
 
 string Encryption::computeHMAC(const char* str,
-                                    int length,
-                                    const string& key) {
+                               int length,
+                               const string& key) {
    HMAC_CTX ctx;
    ::HMAC_CTX_init(&ctx);
-   ::HMAC_Init_ex(&ctx, key.c_str(), key.length(), EVP_sha1(), NULL);
+   ::HMAC_Init_ex(&ctx, key.c_str(), key.length(), EVP_sha1(), nullptr);
 
    if (length > 0) {
       uint32_t msgLengthBigEndian = htonl(length);
@@ -121,7 +121,7 @@ string Encryption::computeHMAC(const char* str,
 //******************************************************************************
 
 string Encryption::base64Encode(unsigned char const* buffer,
-                                     unsigned int len) {
+                                unsigned int len) {
    const int encodedLength = ::Base64encode_len(len);
    if (encodedLength > 0) {
       char* encodedStr = new char[encodedLength];

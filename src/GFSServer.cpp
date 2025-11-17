@@ -481,10 +481,7 @@ bool GFSServer::fileAdd(const string& fileName,
    string dirName;
    int digitsFound = 0;
 
-   const int uniqueIdLength = uniqueIdentifier.length();
-
-   for (int i = 0; i < uniqueIdLength; ++i) {
-      const char ch = uniqueIdentifier[i];
+   for (const char ch : uniqueIdentifier) {
       if (ch >= '0' && ch <= '9') {
          ++digitsFound;
 
